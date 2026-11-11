@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>uvcdv-capture, MiniDV over USB on a modern Mac</title>
+<meta name="description" content="Lossless MiniDV capture over USB on a Mac without FireWire: a userspace UVC DV driver on libusb, with tape control, scene splitting and a native app.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="uvcdv-capture, MiniDV over USB on a modern Mac">
+<meta property="og:description" content="Lossless MiniDV capture over USB on a Mac without FireWire: a userspace UVC DV driver on libusb, with tape control, scene splitting and a native app.">
+<meta property="og:url" content="https://projects.b0ris.net/uvcdv-capture/">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../fonts/xcharter-roman.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../site.css">
+<script>document.documentElement.classList.add("js")</script>
+</head>
+<body>
+<header class="top wrap">
+<a class="mark" href="https://b0ris.net/">b<span class="zero">0</span>ris.net</a>
+<nav>
+<a href="https://b0ris.net/" data-nav="cv">CV</a>
+<a href="https://projects.b0ris.net/" data-nav="projects" aria-current="page">Projects</a>
+<a href="https://b0ris.net/boris-timofeenko-cv.pdf">CV as PDF</a>
+<a href="https://github.com/boris-timofeenko">GitHub</a>
+</nav>
+</header>
+
+<main class="wrap">
+<header class="head">
+<p class="kicker"><a href="https://projects.b0ris.net/">Projects</a> / uvcdv-capture</p>
+<h1>uvcdv-capture</h1>
+<p class="lede">MiniDV capture over USB on a modern Mac.</p>
+</header>
+
+<figure class="feature dark">
+<div class="compare" data-compare>
+<video class="base" muted loop playsinline autoplay preload="auto" poster="../media/tape-poster.jpg" src="../media/tape-clean.mp4"></video>
+<video class="over" muted loop playsinline autoplay preload="auto" poster="../media/tape-vhs-poster.jpg" src="../media/tape-vhs.mp4"></video>
+<div class="divider" aria-hidden="true"></div>
+<span class="tag l">as captured</span><span class="tag r">--vhs</span>
+<input type="range" min="0" max="100" value="50" aria-label="Move the divider between the captured clip and the VHS emulation" class="slide">
+</div>
+<figcaption>The same eight seconds of my tape: the National Assembly in Belgrade, then my dog. Left of the line, the clip as captured (re-encoded here for the web; the .dv file itself is bit for bit); right of it, the same frames through <code>--vhs</code>, which simulates the signal path from the camcorder to a capture card. Drag the line.</figcaption>
+</figure>
+
+<div class="cols">
+<dl class="facts">
+<dt>Version</dt><dd>1.12.1, 12 October 2026</dd>
+<dt>Runs on</dt><dd>macOS on Apple Silicon. Intel should work but is untested. The command line tool also builds on Linux.</dd>
+<dt>Written in</dt><dd>C on libusb (command line), Swift and AppKit (the app)</dd>
+<dt>License</dt><dd>GPL-3.0</dd>
+<dt>Source</dt><dd><a href="https://github.com/boris-timofeenko/uvcdv-capture">GitHub</a>, 12 stars</dd>
+</dl>
+<div class="prose">
+<pre><code>brew tap boris-timofeenko/tap &amp;&amp; brew trust boris-timofeenko/tap &amp;&amp; brew install uvcdv-capture</code></pre>
+<p>I have a box of MiniDV tapes and a Panasonic NV-GS330 camcorder. The proper way to capture MiniDV is FireWire, which modern Macs don&rsquo;t have and Apple removed from macOS. Analog capture digitizes the picture again and loses quality. Some Panasonic camcorders from the mid-2000s can send the same digital stream over plain USB, in a mode called Motion DV. Windows and Linux read it. On a Mac the camera shows up, but no capture device appears, because Apple&rsquo;s driver doesn&rsquo;t implement that format.</p>
+<p>uvcdv-capture reads the stream through libusb, with no drivers and no kernel extensions, and writes .dv files bit for bit as a FireWire capture would. It counts every lost packet; a clean capture shows <code>drop=0 ovf=0</code>, and dvrescue finds no damaged frames.</p>
+<p>It&rsquo;s for people with such a camcorder and a box of tapes. I have tested it only on my NV-GS330. If your camera has a DV-over-USB mode, the <a href="https://github.com/boris-timofeenko/uvcdv-capture#trying-an-untested-camera">README</a> explains how to check it in a minute.</p>
+<p>Claude Code wrote the code; most features came from digitizing my own tapes. I asked the agent: &ldquo;In Scenalyzer on a PC I could start and stop tape playback on this same camera, maybe we can do that here too?&rdquo; Now the Mac does that over USB. I filmed a concert in the dark; the first night mode made it brighter but noisy, and the picture kept changing. The one that stayed applies one fixed shadow curve per scene. There is also a VHS emulation, <code>--vhs</code>, that simulates the signal path from the camcorder to the capture card.</p>
+
+<h2>The one command most people need</h2>
+<pre><code>uvcdv-capture --play --stop --idle 15 tape01.dv</code></pre>
+<p>It starts the tape, captures until the recording ends and stops the tape. One hour of tape is about 13 GB as raw DV, or about 1.7 GB with <code>tape01.mp4</code> as the output.</p>
+
+<h2>Requirements</h2>
+<ul>
+<li>A Panasonic MiniDV camcorder with USB FUNCTION set to Motion DV (NV-GS and PV-GS series), on the AC adapter.</li>
+<li>macOS on Apple Silicon.</li>
+<li>ffmpeg for MP4 encoding and preview: <code>brew install ffmpeg</code>.</li>
+</ul>
+
+<h2>Known limits</h2>
+<ul>
+<li>Sony &ldquo;USB Streaming&rdquo; and JVC or Canon camcorders don&rsquo;t send DV over USB.</li>
+<li>Tested end to end only on the NV-GS330.</li>
+<li>The prebuilt binaries are not code-signed; Homebrew builds from source.</li>
+</ul>
+</div>
+</div>
+
+<div class="block">
+<h2>Screenshot</h2>
+<div class="body gallery">
+<figure class="shot wide"><a href="../img/uvcdv-gui-vhs-assembly.jpg"><img src="../img/uvcdv-gui-vhs-assembly-t.jpg" alt="The app processing the clip from my tape with VHS emulation on. &ldquo;Stream clean, no data loss&rdquo; is the packet counter." loading="lazy"></a><figcaption>The app processing the clip from my tape with VHS emulation on. &ldquo;Stream clean, no data loss&rdquo; is the packet counter. <span class="meta">1600×1261, 230 KB</span></figcaption></figure>
+</div>
+</div>
+</main>
+<footer class="wrap">
+<p>Boris Timofeenko, <a href="mailto:timofeenkoboris@gmail.com">timofeenkoboris@gmail.com</a>. The 0 in b0ris is a zero.</p>
+<p>No cookies, no analytics. Updated 11 November 2026.</p>
+</footer>
+<script src="../charts.js" defer></script>
+
+<script src="../compare.js" defer></script>
+</body>
+</html>

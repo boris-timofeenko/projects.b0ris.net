@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ne-slop-text, a Claude Code skill for writing</title>
+<meta name="description" content="A Claude Code skill that finds where default models land for a writing task and moves the draft away from there. Tested blind on the author's own texts.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ne-slop-text, a Claude Code skill for writing">
+<meta property="og:description" content="A Claude Code skill that finds where default models land for a writing task and moves the draft away from there. Tested blind on the author's own texts.">
+<meta property="og:url" content="https://projects.b0ris.net/ne-slop-text/">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../fonts/xcharter-roman.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../site.css">
+<script>document.documentElement.classList.add("js")</script>
+</head>
+<body>
+<header class="top wrap">
+<a class="mark" href="https://b0ris.net/">b<span class="zero">0</span>ris.net</a>
+<nav>
+<a href="https://b0ris.net/" data-nav="cv">CV</a>
+<a href="https://projects.b0ris.net/" data-nav="projects" aria-current="page">Projects</a>
+<a href="https://b0ris.net/boris-timofeenko-cv.pdf">CV as PDF</a>
+<a href="https://github.com/boris-timofeenko">GitHub</a>
+</nav>
+</header>
+
+<main class="wrap">
+<header class="head">
+<p class="kicker"><a href="https://projects.b0ris.net/">Projects</a> / ne-slop-text</p>
+<h1>ne-slop-text</h1>
+<p class="lede">A Claude Code skill for writing text that reads as written by a particular person.</p>
+</header>
+
+<figure class="feature">
+<svg class="chart neslop full" viewBox="0 0 720 296" role="img" aria-label="For each page of this site: how many questionnaire features lean machine-like in three default texts, in the first draft and after the revision" preserveAspectRatio="xMidYMid meet"><line class="grid" x1="130.0" x2="130.0" y1="24" y2="278"/><text class="tick" x="130.0" y="18" text-anchor="middle">0</text><line class="grid" x1="187.4" x2="187.4" y1="24" y2="278"/><text class="tick" x="187.4" y="18" text-anchor="middle">1</text><line class="grid" x1="244.8" x2="244.8" y1="24" y2="278"/><text class="tick" x="244.8" y="18" text-anchor="middle">2</text><line class="grid" x1="302.2" x2="302.2" y1="24" y2="278"/><text class="tick" x="302.2" y="18" text-anchor="middle">3</text><line class="grid" x1="359.6" x2="359.6" y1="24" y2="278"/><text class="tick" x="359.6" y="18" text-anchor="middle">4</text><line class="grid" x1="417.0" x2="417.0" y1="24" y2="278"/><text class="tick" x="417.0" y="18" text-anchor="middle">5</text><line class="grid" x1="474.4" x2="474.4" y1="24" y2="278"/><text class="tick" x="474.4" y="18" text-anchor="middle">6</text><line class="grid" x1="531.8" x2="531.8" y1="24" y2="278"/><text class="tick" x="531.8" y="18" text-anchor="middle">7</text><line class="grid" x1="589.2" x2="589.2" y1="24" y2="278"/><text class="tick" x="589.2" y="18" text-anchor="middle">8</text><line class="grid" x1="646.6" x2="646.6" y1="24" y2="278"/><text class="tick" x="646.6" y="18" text-anchor="middle">9</text><line class="grid" x1="704.0" x2="704.0" y1="24" y2="278"/><text class="tick" x="704.0" y="18" text-anchor="middle">10</text><text class="row" x="116" y="59.0" text-anchor="end">CV</text><line class="lane" x1="130" x2="704" y1="54.0" y2="54.0"/><circle class="default" cx="474.4" cy="49.0" r="4"/><circle class="default" cx="646.6" cy="54.0" r="4"/><circle class="default" cx="589.2" cy="59.0" r="4"/><line class="move" x1="589.2" x2="302.2" y1="54.0" y2="54.0" style="--i:0"/><circle class="draft" cx="589.2" cy="54.0" r="5.5"/><circle class="rev" cx="302.2" cy="54.0" r="5.5" style="--i:0"/><text class="row" x="116" y="99.0" text-anchor="end">Bolt</text><line class="lane" x1="130" x2="704" y1="94.0" y2="94.0"/><circle class="default" cx="244.8" cy="89.0" r="4"/><circle class="default" cx="244.8" cy="94.0" r="4"/><circle class="default" cx="359.6" cy="99.0" r="4"/><line class="move" x1="244.8" x2="187.4" y1="94.0" y2="94.0" style="--i:1"/><circle class="draft" cx="244.8" cy="94.0" r="5.5"/><circle class="rev" cx="187.4" cy="94.0" r="5.5" style="--i:1"/><text class="row" x="116" y="139.0" text-anchor="end">uvcdv-capture</text><line class="lane" x1="130" x2="704" y1="134.0" y2="134.0"/><circle class="default" cx="302.2" cy="129.0" r="4"/><circle class="default" cx="302.2" cy="134.0" r="4"/><circle class="default" cx="302.2" cy="139.0" r="4"/><line class="move" x1="359.6" x2="244.8" y1="134.0" y2="134.0" style="--i:2"/><circle class="draft" cx="359.6" cy="134.0" r="5.5"/><circle class="rev" cx="244.8" cy="134.0" r="5.5" style="--i:2"/><text class="row" x="116" y="179.0" text-anchor="end">ne-slop-text</text><line class="lane" x1="130" x2="704" y1="174.0" y2="174.0"/><circle class="default" cx="302.2" cy="169.0" r="4"/><circle class="default" cx="302.2" cy="174.0" r="4"/><circle class="default" cx="302.2" cy="179.0" r="4"/><line class="move" x1="417.0" x2="359.6" y1="174.0" y2="174.0" style="--i:3"/><circle class="draft" cx="417.0" cy="174.0" r="5.5"/><circle class="rev" cx="359.6" cy="174.0" r="5.5" style="--i:3"/><text class="row" x="116" y="219.0" text-anchor="end">GdeParkovka</text><line class="lane" x1="130" x2="704" y1="214.0" y2="214.0"/><circle class="default" cx="302.2" cy="209.0" r="4"/><circle class="default" cx="417.0" cy="214.0" r="4"/><circle class="default" cx="359.6" cy="219.0" r="4"/><line class="move" x1="187.4" x2="187.4" y1="214.0" y2="214.0" style="--i:4"/><circle class="draft" cx="187.4" cy="214.0" r="5.5"/><circle class="rev" cx="187.4" cy="214.0" r="5.5" style="--i:4"/><text class="row" x="116" y="259.0" text-anchor="end">Genealogy</text><line class="lane" x1="130" x2="704" y1="254.0" y2="254.0"/><circle class="default" cx="359.6" cy="249.0" r="4"/><circle class="default" cx="359.6" cy="254.0" r="4"/><circle class="default" cx="359.6" cy="259.0" r="4"/><line class="move" x1="417.0" x2="244.8" y1="254.0" y2="254.0" style="--i:5"/><circle class="draft" cx="417.0" cy="254.0" r="5.5"/><circle class="rev" cx="244.8" cy="254.0" r="5.5" style="--i:5"/><text class="tick" x="130" y="292">features that lean machine-like, of the 24 that have a lean</text></svg>
+<ul class="legend">
+<li><span class="key default"></span>three models writing the same page with no method</li>
+<li><span class="key draft"></span>first draft</li>
+<li><span class="key rev"></span>after the revision</li>
+</ul>
+<figcaption>The six pages of this site, scored on the skill&rsquo;s questionnaire: how many of its features lean machine-like. One annotator marked all five versions of each page in one pass. The ne-slop-text page itself started worse than the three defaults and is still above them.</figcaption>
+</figure>
+
+<div class="cols">
+<dl class="facts">
+<dt>Released</dt><dd>7 November 2026</dd>
+<dt>Runs in</dt><dd>Claude Code. The scripts need Python 3 and nothing else.</dd>
+<dt>Source</dt><dd><a href="https://github.com/boris-timofeenko/ne-slop-text">GitHub</a></dd>
+<dt>Cost</dt><dd>6 to 8 agent calls and a few minutes for a longer text</dd>
+</dl>
+<div class="prose">
+<pre><code>git clone https://github.com/boris-timofeenko/ne-slop-text ~/.claude/skills/ne-slop-text</code></pre>
+<p>Then ask Claude Code to write &ldquo;ne-slop&rdquo;, or run <code>/ne-slop-text</code>.</p>
+<p>I made a quest game, Belgrade 2026, and its graphics came out alive. The hero was cut out of a friend&rsquo;s photo with the white fringe of the magic eraser left on. That became my ne-slop skill for creative work. For text it was not enough, and text run through the popular humanizer skill I could spot from a mile away.</p>
+<p>I built ne-slop-text with Claude on my own texts and tested it blind on myself. For each task three fresh agents on different models write the text with no method, and an annotator marks the draft and these defaults on a questionnaire of 26 discourse features, seeded from the StoryScope paper (Russell et al., COLM 2026), where narrative decisions alone told AI from human stories at 93% F1.</p>
+<p>In the last round, a message to a hiring team, four default writers got the same material, and the two Opus letters had the same skeleton down to the closing line, &ldquo;I&rsquo;d be glad to have that coffee&rdquo;. Where the draft did the same machine-like things as every default, the reviser cut three clever turns and three of four phrases quoted from the job ad. The draft moved from third place to first. The plain Opus letter came last, and I recognised it.</p>
+<p>That is one judge, three tasks and one domain so far, so the numbers show a direction.</p>
+</div>
+</div>
+
+<div class="block">
+<h2>Screenshot</h2>
+<div class="body gallery">
+<figure class="shot wide"><a href="../img/neslop-blind.jpg"><img src="../img/neslop-blind-t.jpg" alt="The blind-test page. Variants are shuffled; a click marks a sentence as slop or alive." loading="lazy"></a><figcaption>The blind-test page. Variants are shuffled; a click marks a sentence as slop or alive. <span class="meta">1600×1125, 179 KB</span></figcaption></figure>
+</div>
+</div>
+</main>
+<footer class="wrap">
+<p>Boris Timofeenko, <a href="mailto:timofeenkoboris@gmail.com">timofeenkoboris@gmail.com</a>. The 0 in b0ris is a zero.</p>
+<p>No cookies, no analytics. Updated 11 November 2026.</p>
+</footer>
+<script src="../charts.js" defer></script>
+
+</body>
+</html>
