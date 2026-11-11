@@ -3,109 +3,152 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bolt, a photo viewer for macOS</title>
-<meta name="description" content="Native macOS photo viewer: open one photo, go through the whole folder with one key per decision. Measured against its spec.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Bolt, a photo viewer for macOS">
-<meta property="og:description" content="Native macOS photo viewer: open one photo, go through the whole folder with one key per decision. Measured against its spec.">
-<meta property="og:url" content="https://projects.b0ris.net/bolt/">
+<meta name="robots" content="noindex">
+<title>Bolt: b0ris.net</title>
+<meta name="description" content="Bolt, a photo viewer for the Mac: go through a folder of photos with one key per decision.">
 <link rel="icon" href="../favicon.svg?v=b2645dfd" type="image/svg+xml">
-<link rel="preload" href="../fonts/xcharter-roman.woff2?v=bc0db4ed" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../site.css?v=27f44b49">
-<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../v/disc/disc.css?v=6da0a4ae">
+<style>
+/* A project opened from the menu, the way a game pauses: the room of the projects menu behind, dimmed; Bolt's 3D card
+   from the list of all projects turning slowly; the measurements on the navy and white of the CV; the real app
+   below in plain screenshots. */
+html { background: #000022; -webkit-text-size-adjust: 100%; }
+body { margin: 0; min-height: 100vh; color: #CCEEFF; font: 17px/1.5 Arial, Helvetica, sans-serif;
+  background: linear-gradient(rgba(0,0,30,0.8), rgba(0,0,30,0.8)), #000022 url(../v/proto/menu-room.jpg?v=ae94d8cd) center / cover fixed; }
+a { color: #99CCFF; } a:hover { color: #FFFF66; }
+.page { max-width: 1040px; margin: 0 auto; padding: 30px 20px 56px; }
+.head { display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 10px 32px; align-items: center; margin: 0 0 26px; }
+.slab { display: block; width: 400px; max-width: 100%; aspect-ratio: 400 / 275; background: url(../v/disc/card-bolt.webp?v=8e894f54) 0 0 / 800% 100% no-repeat; animation: turn 2.4s steps(8, jump-none) infinite alternate; }
+@keyframes turn { from { background-position-x: 0%; } to { background-position-x: 100%; } }
+@media (prefers-reduced-motion: reduce) { .slab { animation: none; } }
+h1 { margin: 0 0 8px; font: 52px/1 "Arial Black", "Arial Bold", Arial, sans-serif; color: #FFF; text-shadow: 3px 3px 0 #000; }
+.lead { margin: 0; font-size: 21px; line-height: 1.4; color: #FFFF66; font-weight: bold; }
+.text { max-width: 46em; }
+.text p { margin: 0 0 1.4em; }
+.page kbd { font: inherit; font-size: 0.9em; color: #000033; background: #CCEEFF; border-radius: 3px; padding: 0 5px; }
+code { font: 0.9em Menlo, Monaco, monospace; color: #FFFF99; }
+/* the features: the stars of the back of the box, as on the CV */
+.feat { list-style: none; margin: 0 0 8px; padding: 0; max-width: 46em; }
+.feat li { position: relative; padding-left: 26px; margin: 0 0 10px; }
+.feat li::before { content: "\2605"; position: absolute; left: 0; top: 0; color: #FFCC00; }
+.measure { margin: 26px 0 0; }
+figure.shot { margin: 28px 0 0; color: #CCEEFF; font-size: 15px; line-height: 1.4; }
+figure.shot .meta { display: none; }
+figure.shot img { display: block; width: 100%; height: auto; border: 2px solid #6699CC; box-shadow: 6px 6px 0 #000; margin: 0 0 10px; box-sizing: border-box; }
+.status { margin: 44px 0 0; padding: 12px 16px; max-width: 46em; background: #000; border-left: 4px solid #FFCC00; color: #FFF; }
+/* section names: the yellow tag of the CV */
+h2 { display: inline-block; margin: 44px 0 16px; padding: 4px 12px 3px; background: #FFCC00; color: #000033; font: 17px/1.2 "Arial Black", "Arial Bold", Arial, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; box-shadow: 3px 3px 0 #000; }
+
+.measure { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 24px; align-items: start; }
+.plot { margin: 0; padding: 16px 16px 12px; background: #000022; border: 2px solid #6699CC; box-shadow: 6px 6px 0 #000; }
+.plot figcaption { margin: 8px 0 0; font-size: 14px; line-height: 1.4; color: #99CCFF; }
+.chart { display: block; width: 100%; height: auto; }
+.chart text { font: 13px Arial, Helvetica, sans-serif; fill: #99CCFF; }
+.chart .tick { font-size: 12px; }
+.chart .grid { stroke: rgba(153,204,255,0.18); stroke-width: 1; }
+.chart.bolt .bar { fill: #CCEEFF; }
+.chart.bolt .budget { stroke: #FF6666; stroke-width: 2; }
+.chart.bolt .median { stroke: #FFFF66; stroke-width: 2; stroke-dasharray: 6 4; }
+.chart.bolt .note { fill: #FF6666; font-weight: bold; }
+.chart.bolt .note.strong { fill: #FFFF66; }
+.chart.bolt .note.sub { fill: #99CCFF; font-weight: normal; }
+/* the table: the white box of the CV */
+.req { background: #FFF; color: #000; padding: 14px 16px 12px; font-size: 15px; line-height: 1.35; box-shadow: 6px 6px 0 #000; }
+.req table { width: 100%; border-collapse: collapse; }
+.req th, .req td { padding: 6px 6px 6px 0; text-align: left; vertical-align: top; border-bottom: 1px solid #CCC; }
+.req thead th { font-size: 13px; border-bottom: 2px solid #000; }
+.req tbody th { font-weight: normal; }
+.req td.b { font-weight: bold; white-space: nowrap; }
+.req p { margin: 10px 0 0; font-size: 13px; color: #333; }
+
+@media (max-width: 960px) { .measure { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 860px) {
+  .head { grid-template-columns: minmax(0, 1fr); } .slab { margin: 0 auto; } h1 { font-size: 40px; }
+}
+@media (max-width: 600px) {
+  .page { padding: 18px 16px 40px; } .lead { font-size: 19px; }
+  .plot { padding: 10px 8px 8px; overflow-x: auto; }
+  .chart { min-width: 600px; }  /* the bars and their notes stay readable; the chart scrolls sideways */
+  .req { padding: 12px 12px 10px; font-size: 14px; } .req td.b { white-space: normal; }
+}
+</style>
 </head>
-<body>
-<header class="top wrap">
-<a class="mark" href="https://b0ris.net/">b<span class="zero">0</span>ris.net</a>
-<nav>
-<a href="https://b0ris.net/" data-nav="cv">CV</a>
-<a href="https://projects.b0ris.net/" data-nav="projects" aria-current="page">Projects</a>
-<a href="https://b0ris.net/boris-timofeenko-cv.pdf">CV as PDF</a>
-<a href="https://github.com/boris-timofeenko">GitHub</a>
+<body data-page="projects">
+<nav class="bar" aria-label="Disc">
+<a href="https://b0ris.net/projects/" data-back><kbd>Esc</kbd> Projects</a>
+<span class="gap"></span>
+<a href="https://b0ris.net/cv/" data-nav="cv">CV</a>
+<a href="https://b0ris.net/projects/" data-nav="projects">Projects</a>
+<a href="https://b0ris.net/contacts/" data-nav="contacts">Contacts</a>
 </nav>
-</header>
-
-<main class="wrap">
-<header class="head">
-<p class="kicker"><a href="https://projects.b0ris.net/">Projects</a> / Bolt</p>
-<h1>Bolt</h1>
-<p class="lede">Photo viewer for macOS. Open one photo from Finder and go through the whole folder, one key per decision.</p>
-</header>
-
-<figure class="feature">
-<svg class="chart bolt full" viewBox="0 0 720 292" role="img" aria-label="Time to show the next photo for 48 photos: median 3.9 ms, slowest 10.3 ms, against a budget of 16 ms" preserveAspectRatio="xMidYMid meet"><line class="grid" x1="44" x2="608" y1="228.0" y2="228.0"/><text class="tick" x="36" y="232.0" text-anchor="end">0</text><line class="grid" x1="44" x2="608" y1="178.0" y2="178.0"/><text class="tick" x="36" y="182.0" text-anchor="end">5</text><line class="grid" x1="44" x2="608" y1="128.0" y2="128.0"/><text class="tick" x="36" y="132.0" text-anchor="end">10</text><line class="grid" x1="44" x2="608" y1="78.0" y2="78.0"/><text class="tick" x="36" y="82.0" text-anchor="end">15</text><line class="grid" x1="44" x2="608" y1="28.0" y2="28.0"/><text class="tick" x="36" y="32.0" text-anchor="end">20</text><text class="tick" x="36" y="12" text-anchor="end">ms</text><rect class="bar" x="46.1" y="124.7" width="7.5" height="103.3" style="--i:0"><title>IMG_0845.HEIC: 10.3 ms</title></rect><image class="thumb" href="../img/strip/IMG_0845.jpg?v=9adf5eef" x="44.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:0"/><rect class="bar" x="57.9" y="193.0" width="7.5" height="35.0" style="--i:1"><title>IMG_0872.HEIC: 3.5 ms</title></rect><image class="thumb" href="../img/strip/IMG_0872.jpg?v=c7f67f15" x="56.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:1"/><rect class="bar" x="69.6" y="177.2" width="7.5" height="50.8" style="--i:2"><title>IMG_0892.HEIC: 5.1 ms</title></rect><image class="thumb" href="../img/strip/IMG_0892.jpg?v=43f1c6fd" x="68.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:2"/><rect class="bar" x="81.4" y="198.5" width="7.5" height="29.5" style="--i:3"><title>IMG_0904.HEIC: 3.0 ms</title></rect><image class="thumb" href="../img/strip/IMG_0904.jpg?v=970fe047" x="79.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:3"/><rect class="bar" x="93.1" y="206.3" width="7.5" height="21.7" style="--i:4"><title>IMG_0916.HEIC: 2.2 ms</title></rect><image class="thumb" href="../img/strip/IMG_0916.jpg?v=06829c61" x="91.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:4"/><rect class="bar" x="104.9" y="197.2" width="7.5" height="30.8" style="--i:5"><title>IMG_0946.HEIC: 3.1 ms</title></rect><image class="thumb" href="../img/strip/IMG_0946.jpg?v=f8988ffb" x="103.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:5"/><rect class="bar" x="116.6" y="184.4" width="7.5" height="43.6" style="--i:6"><title>IMG_0976.HEIC: 4.4 ms</title></rect><image class="thumb" href="../img/strip/IMG_0976.jpg?v=e6d8225b" x="115.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:6"/><rect class="bar" x="128.4" y="188.8" width="7.5" height="39.2" style="--i:7"><title>IMG_0988.HEIC: 3.9 ms</title></rect><image class="thumb" href="../img/strip/IMG_0988.jpg?v=d3c3e85e" x="126.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:7"/><rect class="bar" x="140.1" y="187.9" width="7.5" height="40.1" style="--i:8"><title>IMG_1001.HEIC: 4.0 ms</title></rect><image class="thumb" href="../img/strip/IMG_1001.jpg?v=4d69a2d6" x="138.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:8"/><rect class="bar" x="151.9" y="203.6" width="7.5" height="24.4" style="--i:9"><title>IMG_1027.HEIC: 2.4 ms</title></rect><image class="thumb" href="../img/strip/IMG_1027.jpg?v=1a321fd3" x="150.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:9"/><rect class="bar" x="163.6" y="189.2" width="7.5" height="38.8" style="--i:10"><title>IMG_1045.HEIC: 3.9 ms</title></rect><image class="thumb" href="../img/strip/IMG_1045.jpg?v=f8804124" x="162.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:10"/><rect class="bar" x="175.4" y="187.5" width="7.5" height="40.5" style="--i:11"><title>IMG_1140.HEIC: 4.0 ms</title></rect><image class="thumb" href="../img/strip/IMG_1140.jpg?v=e607a4c5" x="173.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:11"/><rect class="bar" x="187.1" y="171.8" width="7.5" height="56.2" style="--i:12"><title>IMG_1165.HEIC: 5.6 ms</title></rect><image class="thumb" href="../img/strip/IMG_1165.jpg?v=751777d7" x="185.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:12"/><rect class="bar" x="198.9" y="192.8" width="7.5" height="35.2" style="--i:13"><title>IMG_1188.HEIC: 3.5 ms</title></rect><image class="thumb" href="../img/strip/IMG_1188.jpg?v=262066d0" x="197.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:13"/><rect class="bar" x="210.6" y="184.3" width="7.5" height="43.7" style="--i:14"><title>IMG_1236.HEIC: 4.4 ms</title></rect><image class="thumb" href="../img/strip/IMG_1236.jpg?v=31d0a361" x="209.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:14"/><rect class="bar" x="222.4" y="189.2" width="7.5" height="38.8" style="--i:15"><title>IMG_1248.HEIC: 3.9 ms</title></rect><image class="thumb" href="../img/strip/IMG_1248.jpg?v=5800eb32" x="220.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:15"/><rect class="bar" x="234.1" y="194.4" width="7.5" height="33.6" style="--i:16"><title>IMG_1260.HEIC: 3.4 ms</title></rect><image class="thumb" href="../img/strip/IMG_1260.jpg?v=8be2afbd" x="232.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:16"/><rect class="bar" x="245.9" y="182.0" width="7.5" height="46.0" style="--i:17"><title>IMG_1338.HEIC: 4.6 ms</title></rect><image class="thumb" href="../img/strip/IMG_1338.jpg?v=03eb9ea3" x="244.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:17"/><rect class="bar" x="257.6" y="201.4" width="7.5" height="26.6" style="--i:18"><title>IMG_1472.HEIC: 2.7 ms</title></rect><image class="thumb" href="../img/strip/IMG_1472.jpg?v=67544a62" x="256.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:18"/><rect class="bar" x="269.4" y="205.4" width="7.5" height="22.6" style="--i:19"><title>IMG_1487.HEIC: 2.3 ms</title></rect><image class="thumb" href="../img/strip/IMG_1487.jpg?v=9daa9bda" x="267.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:19"/><rect class="bar" x="281.1" y="206.5" width="7.5" height="21.5" style="--i:20"><title>IMG_1651.HEIC: 2.1 ms</title></rect><image class="thumb" href="../img/strip/IMG_1651.jpg?v=f2630109" x="279.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:20"/><rect class="bar" x="292.9" y="186.7" width="7.5" height="41.3" style="--i:21"><title>IMG_1734.HEIC: 4.1 ms</title></rect><image class="thumb" href="../img/strip/IMG_1734.jpg?v=72e5984d" x="291.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:21"/><rect class="bar" x="304.6" y="181.1" width="7.5" height="46.9" style="--i:22"><title>IMG_1761.HEIC: 4.7 ms</title></rect><image class="thumb" href="../img/strip/IMG_1761.jpg?v=c64ad98d" x="303.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:22"/><rect class="bar" x="316.4" y="188.7" width="7.5" height="39.3" style="--i:23"><title>IMG_1786.HEIC: 3.9 ms</title></rect><image class="thumb" href="../img/strip/IMG_1786.jpg?v=c1a8fdc3" x="314.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:23"/><rect class="bar" x="328.1" y="191.2" width="7.5" height="36.8" style="--i:24"><title>IMG_1798.HEIC: 3.7 ms</title></rect><image class="thumb" href="../img/strip/IMG_1798.jpg?v=61e120aa" x="326.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:24"/><rect class="bar" x="339.9" y="173.1" width="7.5" height="54.9" style="--i:25"><title>IMG_1810.HEIC: 5.5 ms</title></rect><image class="thumb" href="../img/strip/IMG_1810.jpg?v=c96e533b" x="338.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:25"/><rect class="bar" x="351.6" y="192.4" width="7.5" height="35.6" style="--i:26"><title>IMG_1836.HEIC: 3.6 ms</title></rect><image class="thumb" href="../img/strip/IMG_1836.jpg?v=af5082f9" x="350.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:26"/><rect class="bar" x="363.4" y="200.0" width="7.5" height="28.0" style="--i:27"><title>IMG_1856.HEIC: 2.8 ms</title></rect><image class="thumb" href="../img/strip/IMG_1856.jpg?v=89304f9a" x="361.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:27"/><rect class="bar" x="375.1" y="199.2" width="7.5" height="28.8" style="--i:28"><title>IMG_1886.HEIC: 2.9 ms</title></rect><image class="thumb" href="../img/strip/IMG_1886.jpg?v=6a462543" x="373.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:28"/><rect class="bar" x="386.9" y="184.1" width="7.5" height="43.9" style="--i:29"><title>IMG_1918.HEIC: 4.4 ms</title></rect><image class="thumb" href="../img/strip/IMG_1918.jpg?v=c5e1b18c" x="385.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:29"/><rect class="bar" x="398.6" y="206.9" width="7.5" height="21.1" style="--i:30"><title>IMG_1957.HEIC: 2.1 ms</title></rect><image class="thumb" href="../img/strip/IMG_1957.jpg?v=1bf4f25a" x="397.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:30"/><rect class="bar" x="410.4" y="181.3" width="7.5" height="46.7" style="--i:31"><title>IMG_1969.HEIC: 4.7 ms</title></rect><image class="thumb" href="../img/strip/IMG_1969.jpg?v=a6fd7488" x="408.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:31"/><rect class="bar" x="422.1" y="186.3" width="7.5" height="41.7" style="--i:32"><title>IMG_2007.HEIC: 4.2 ms</title></rect><image class="thumb" href="../img/strip/IMG_2007.jpg?v=ca3344da" x="420.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:32"/><rect class="bar" x="433.9" y="185.1" width="7.5" height="42.9" style="--i:33"><title>IMG_2019.HEIC: 4.3 ms</title></rect><image class="thumb" href="../img/strip/IMG_2019.jpg?v=21826478" x="432.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:33"/><rect class="bar" x="445.6" y="195.0" width="7.5" height="33.0" style="--i:34"><title>IMG_2031.HEIC: 3.3 ms</title></rect><image class="thumb" href="../img/strip/IMG_2031.jpg?v=860bc7cc" x="444.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:34"/><rect class="bar" x="457.4" y="195.1" width="7.5" height="32.9" style="--i:35"><title>IMG_2048.HEIC: 3.3 ms</title></rect><image class="thumb" href="../img/strip/IMG_2048.jpg?v=d8867ad3" x="455.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:35"/><rect class="bar" x="469.1" y="180.8" width="7.5" height="47.2" style="--i:36"><title>IMG_2060.HEIC: 4.7 ms</title></rect><image class="thumb" href="../img/strip/IMG_2060.jpg?v=84eeccd7" x="467.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:36"/><rect class="bar" x="480.9" y="202.5" width="7.5" height="25.5" style="--i:37"><title>IMG_2072.HEIC: 2.5 ms</title></rect><image class="thumb" href="../img/strip/IMG_2072.jpg?v=633dbb43" x="479.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:37"/><rect class="bar" x="492.6" y="186.9" width="7.5" height="41.1" style="--i:38"><title>IMG_2088.HEIC: 4.1 ms</title></rect><image class="thumb" href="../img/strip/IMG_2088.jpg?v=f108a554" x="491.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:38"/><rect class="bar" x="504.4" y="196.4" width="7.5" height="31.6" style="--i:39"><title>IMG_2118.HEIC: 3.2 ms</title></rect><image class="thumb" href="../img/strip/IMG_2118.jpg?v=78ea9aa4" x="502.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:39"/><rect class="bar" x="516.1" y="181.9" width="7.5" height="46.1" style="--i:40"><title>IMG_2182.HEIC: 4.6 ms</title></rect><image class="thumb" href="../img/strip/IMG_2182.jpg?v=899ee1fe" x="514.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:40"/><rect class="bar" x="527.9" y="189.1" width="7.5" height="38.9" style="--i:41"><title>IMG_2198.HEIC: 3.9 ms</title></rect><image class="thumb" href="../img/strip/IMG_2198.jpg?v=846c0e27" x="526.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:41"/><rect class="bar" x="539.6" y="203.3" width="7.5" height="24.7" style="--i:42"><title>IMG_2210.HEIC: 2.5 ms</title></rect><image class="thumb" href="../img/strip/IMG_2210.jpg?v=c3bf97fb" x="538.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:42"/><rect class="bar" x="551.4" y="187.7" width="7.5" height="40.3" style="--i:43"><title>IMG_2222.HEIC: 4.0 ms</title></rect><image class="thumb" href="../img/strip/IMG_2222.jpg?v=6a841c56" x="549.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:43"/><rect class="bar" x="563.1" y="184.8" width="7.5" height="43.2" style="--i:44"><title>IMG_2237.HEIC: 4.3 ms</title></rect><image class="thumb" href="../img/strip/IMG_2237.jpg?v=c3d8822d" x="561.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:44"/><rect class="bar" x="574.9" y="184.7" width="7.5" height="43.3" style="--i:45"><title>IMG_2297.HEIC: 4.3 ms</title></rect><image class="thumb" href="../img/strip/IMG_2297.jpg?v=ad3fb513" x="573.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:45"/><rect class="bar" x="586.6" y="187.4" width="7.5" height="40.6" style="--i:46"><title>IMG_2309.HEIC: 4.1 ms</title></rect><image class="thumb" href="../img/strip/IMG_2309.jpg?v=a11ec372" x="585.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:46"/><rect class="bar" x="598.4" y="143.4" width="7.5" height="84.6" style="--i:47"><title>IMG_2336.HEIC: 8.5 ms</title></rect><image class="thumb" href="../img/strip/IMG_2336.jpg?v=13b99d4d" x="596.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:47"/><line class="budget" x1="44" x2="608" y1="68.0" y2="68.0"/><line class="median" x1="44" x2="608" y1="188.7" y2="188.7"/><text class="note" x="618" y="65.0">budget 16 ms</text><text class="note sub" x="618" y="81.0">from the spec</text><text class="note strong" x="618" y="192.7">median 3.9 ms</text><text class="tick" x="44" y="286">48 photos in the order the arrow key reached them</text></svg>
-<figcaption>Time on the main thread to show the next photo, for 48 of my photos from Tbilisi, each under its bar. Median 3.9 ms, slowest 10.3 ms. Measured with Bolt&rsquo;s own benchmark on a MacBook with Apple M5 and 16 GB, 7 November 2026.</figcaption>
-</figure>
-
-<div class="cols">
-<dl class="facts">
-<dt>Status</dt><dd>Not released. The build is signed ad hoc.</dd>
-<dt>Runs on</dt><dd>macOS 14 or newer</dd>
-<dt>Written in</dt><dd>Swift 6 and AppKit, the system decoder (ImageIO), no third-party dependencies</dd>
-<dt>Tests</dt><dd>82 unit tests of the core, 19 smoke checks that press keys in the built app</dd>
-<dt>License</dt><dd>MIT</dd>
-</dl>
-<div class="prose">
-<p>I wanted to open a photo from Finder and go through the whole folder with the keyboard, as in IrfanView on Windows. In Bolt Delete sends the photo to the Trash and the next one is already on screen, and keys 1 to 9 move it to folders. Preview can&rsquo;t flip through a folder, and the viewers that can either lack the system HEIC decoder or are sold by subscription.</p>
-<p>On 2 November 2026 I wrote a spec with five scenarios and speed targets. One of them: 400 photos from an iPhone, the best to a folder, junk to the Trash, one key per decision. The spec had a rule that a feature without a scenario doesn&rsquo;t get in. That night I sent it to Claude Code: &ldquo;Task for the night: build me a viewer from this spec&hellip; Make the interface NOT neural-slop (try hard)&hellip; Work autonomously, I&rsquo;m going to sleep.&rdquo;</p>
-
-<h2>Measured against the spec</h2>
-<div class="table">
-<table>
-<thead><tr><th></th><th>Target from the spec</th><th>Measured</th></tr></thead>
-<tbody>
-<tr><th scope="row">Cold start to first frame</th><td>under 250 ms</td><td class="num">195 to 235 ms</td></tr>
-<tr><th scope="row">Next photo, median / p95</th><td>under 16 / 50 ms</td><td class="num">5.6 / 6.4 ms</td></tr>
-<tr><th scope="row">HEIC to JPEG</th><td>1000 photos under 60 s</td><td class="num">400 photos in 9 s</td></tr>
-<tr><th scope="row">Memory when idle</th><td>under 150 MB</td><td class="num">104 MB</td></tr>
-</tbody>
-</table>
+<main class="page">
+<div class="head">
+<span class="slab" role="img" aria-label="Bolt showing one of my photos, on a card"></span>
+<div><h1>Bolt</h1><p class="lead">Bolt is a blazingly fast photo viewer for Mac. Highly optimized, it switches between heavy photos faster than you notice. Inspired by IrfanView, it offers one-key photo and batch transformations. It&rsquo;s also free and open source.</p></div>
 </div>
-<p>Measured on a MacBook with Apple M5 and 16 GB, on synthetic 12-megapixel HEIC files with every frame already decoded; the chart above is a separate run on my own photos. I haven&rsquo;t checked it on an M1 with 8 GB. The cold start is the first thing to check there, because about 100 ms of it goes to starting the HEVC decoder.</p>
-<p>No operation deletes a file past the Trash or overwrites an existing one, and <kbd>&#8984;Z</kbd> undoes every file action. Rotation changes only the Orientation tag; a test checks that the pixels stay byte for byte. The core has 82 unit tests, and 19 smoke checks drive the built app with real key presses.</p>
-
-<h2>Keys</h2>
-<div class="table">
-<table>
-<tbody>
-<tr><td class="num"><kbd>&larr;</kbd> <kbd>&rarr;</kbd></td><td>previous, next photo</td></tr>
-<tr><td class="num"><kbd>Delete</kbd></td><td>to the Trash, and the next photo is already on screen</td></tr>
-<tr><td class="num"><kbd>1</kbd> to <kbd>9</kbd></td><td>move to an assigned folder; with <kbd>&#8997;</kbd> copy</td></tr>
-<tr><td class="num"><kbd>P</kbd> <kbd>X</kbd> <kbd>U</kbd></td><td>pick, reject, clear the flag (kept in Finder tags)</td></tr>
-<tr><td class="num"><kbd>K</kbd></td><td>compare 2 to 4 photos with one zoom</td></tr>
-<tr><td class="num"><kbd>G</kbd></td><td>thumbnail grid</td></tr>
-<tr><td class="num"><kbd>&#8984;Z</kbd></td><td>undo the last file operation</td></tr>
-<tr><td class="num"><kbd>?</kbd></td><td>all keys</td></tr>
-</tbody>
-</table>
+<div class="text">
+<p>On a Mac, the default photo viewer just didn&rsquo;t work for me. It doesn&rsquo;t go through the folder when you open one photo, and it freezes for a fraction of a second when switching to the next photo. It pissed me off when working with large photo libraries. Third-party viewers either lacked performance or UX, or were not free.</p>
+<p>Bolt is not a substitute for photo catalogers. It just shows you whatever is in the directory and offers a set of simple transformations. That&rsquo;s it!</p>
 </div>
+<figure class="shot"><a href="../img/bolt-series.jpg?v=32fed8fc"><img src="../img/bolt-series-t.jpg?v=fc565454" alt="Bolt opened inside my folder of photos from Georgia." loading="lazy"></a><figcaption>Bolt opened inside my folder of photos from Georgia. <span class="meta">1600×915, 188 KB</span></figcaption></figure>
 
-<h2>Not done yet</h2>
-<ul>
-<li>Notarization and updates: they need a Developer ID, and the build is signed ad hoc.</li>
-<li>WebP export: ImageIO reads WebP but doesn&rsquo;t write it.</li>
-<li>A GPS mini-map: the spec allows the network only for updates, so there are coordinates and an &ldquo;Open in Maps&rdquo; button instead.</li>
-<li>Finding duplicates and bursts.</li>
+<h2>Fast</h2>
+<ul class="feat">
+<li>The next photo appears in 3.9&nbsp;ms on my iPhone photos, while a 60&nbsp;Hz screen draws a frame every 16.7&nbsp;ms. From launch to the first photo it takes about 200&nbsp;ms.</li>
+<li>Photos are decoded by the Mac&rsquo;s own ImageIO and the hardware HEVC decoder, straight to the size of the screen. The full-size image is decoded only for 100% zoom.</li>
+<li>The next 4 photos and the previous 2 are decoded ahead, in the direction you are going. Work that is no longer needed is cancelled, so nothing piles up in the queue.</li>
+<li>With an arrow key held down Bolt shows the previews embedded in the files, 5&nbsp;ms a frame, and decodes the sharp photo 80&nbsp;ms after you let go.</li>
 </ul>
+<div class="measure">
+<figure class="plot">
+<svg class="chart bolt full" viewBox="0 0 720 292" role="img" aria-label="Time to show the next photo for 48 photos: median 3.9 ms, slowest 10.3 ms, against a budget of 16 ms" preserveAspectRatio="xMidYMid meet"><line class="grid" x1="44" x2="608" y1="228.0" y2="228.0"/><text class="tick" x="36" y="232.0" text-anchor="end">0</text><line class="grid" x1="44" x2="608" y1="178.0" y2="178.0"/><text class="tick" x="36" y="182.0" text-anchor="end">5</text><line class="grid" x1="44" x2="608" y1="128.0" y2="128.0"/><text class="tick" x="36" y="132.0" text-anchor="end">10</text><line class="grid" x1="44" x2="608" y1="78.0" y2="78.0"/><text class="tick" x="36" y="82.0" text-anchor="end">15</text><line class="grid" x1="44" x2="608" y1="28.0" y2="28.0"/><text class="tick" x="36" y="32.0" text-anchor="end">20</text><text class="tick" x="36" y="12" text-anchor="end">ms</text><rect class="bar" x="46.1" y="124.7" width="7.5" height="103.3" style="--i:0"><title>IMG_0845.HEIC: 10.3 ms</title></rect><image class="thumb" href="../img/strip/IMG_0845.jpg?v=9adf5eef" x="44.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:0"/><rect class="bar" x="57.9" y="193.0" width="7.5" height="35.0" style="--i:1"><title>IMG_0872.HEIC: 3.5 ms</title></rect><image class="thumb" href="../img/strip/IMG_0872.jpg?v=c7f67f15" x="56.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:1"/><rect class="bar" x="69.6" y="177.2" width="7.5" height="50.8" style="--i:2"><title>IMG_0892.HEIC: 5.1 ms</title></rect><image class="thumb" href="../img/strip/IMG_0892.jpg?v=43f1c6fd" x="68.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:2"/><rect class="bar" x="81.4" y="198.5" width="7.5" height="29.5" style="--i:3"><title>IMG_0904.HEIC: 3.0 ms</title></rect><image class="thumb" href="../img/strip/IMG_0904.jpg?v=970fe047" x="79.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:3"/><rect class="bar" x="93.1" y="206.3" width="7.5" height="21.7" style="--i:4"><title>IMG_0916.HEIC: 2.2 ms</title></rect><image class="thumb" href="../img/strip/IMG_0916.jpg?v=06829c61" x="91.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:4"/><rect class="bar" x="104.9" y="197.2" width="7.5" height="30.8" style="--i:5"><title>IMG_0946.HEIC: 3.1 ms</title></rect><image class="thumb" href="../img/strip/IMG_0946.jpg?v=f8988ffb" x="103.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:5"/><rect class="bar" x="116.6" y="184.4" width="7.5" height="43.6" style="--i:6"><title>IMG_0976.HEIC: 4.4 ms</title></rect><image class="thumb" href="../img/strip/IMG_0976.jpg?v=e6d8225b" x="115.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:6"/><rect class="bar" x="128.4" y="188.8" width="7.5" height="39.2" style="--i:7"><title>IMG_0988.HEIC: 3.9 ms</title></rect><image class="thumb" href="../img/strip/IMG_0988.jpg?v=d3c3e85e" x="126.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:7"/><rect class="bar" x="140.1" y="187.9" width="7.5" height="40.1" style="--i:8"><title>IMG_1001.HEIC: 4.0 ms</title></rect><image class="thumb" href="../img/strip/IMG_1001.jpg?v=4d69a2d6" x="138.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:8"/><rect class="bar" x="151.9" y="203.6" width="7.5" height="24.4" style="--i:9"><title>IMG_1027.HEIC: 2.4 ms</title></rect><image class="thumb" href="../img/strip/IMG_1027.jpg?v=1a321fd3" x="150.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:9"/><rect class="bar" x="163.6" y="189.2" width="7.5" height="38.8" style="--i:10"><title>IMG_1045.HEIC: 3.9 ms</title></rect><image class="thumb" href="../img/strip/IMG_1045.jpg?v=f8804124" x="162.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:10"/><rect class="bar" x="175.4" y="187.5" width="7.5" height="40.5" style="--i:11"><title>IMG_1140.HEIC: 4.0 ms</title></rect><image class="thumb" href="../img/strip/IMG_1140.jpg?v=e607a4c5" x="173.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:11"/><rect class="bar" x="187.1" y="171.8" width="7.5" height="56.2" style="--i:12"><title>IMG_1165.HEIC: 5.6 ms</title></rect><image class="thumb" href="../img/strip/IMG_1165.jpg?v=751777d7" x="185.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:12"/><rect class="bar" x="198.9" y="192.8" width="7.5" height="35.2" style="--i:13"><title>IMG_1188.HEIC: 3.5 ms</title></rect><image class="thumb" href="../img/strip/IMG_1188.jpg?v=262066d0" x="197.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:13"/><rect class="bar" x="210.6" y="184.3" width="7.5" height="43.7" style="--i:14"><title>IMG_1236.HEIC: 4.4 ms</title></rect><image class="thumb" href="../img/strip/IMG_1236.jpg?v=31d0a361" x="209.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:14"/><rect class="bar" x="222.4" y="189.2" width="7.5" height="38.8" style="--i:15"><title>IMG_1248.HEIC: 3.9 ms</title></rect><image class="thumb" href="../img/strip/IMG_1248.jpg?v=5800eb32" x="220.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:15"/><rect class="bar" x="234.1" y="194.4" width="7.5" height="33.6" style="--i:16"><title>IMG_1260.HEIC: 3.4 ms</title></rect><image class="thumb" href="../img/strip/IMG_1260.jpg?v=8be2afbd" x="232.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:16"/><rect class="bar" x="245.9" y="182.0" width="7.5" height="46.0" style="--i:17"><title>IMG_1338.HEIC: 4.6 ms</title></rect><image class="thumb" href="../img/strip/IMG_1338.jpg?v=03eb9ea3" x="244.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:17"/><rect class="bar" x="257.6" y="201.4" width="7.5" height="26.6" style="--i:18"><title>IMG_1472.HEIC: 2.7 ms</title></rect><image class="thumb" href="../img/strip/IMG_1472.jpg?v=67544a62" x="256.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:18"/><rect class="bar" x="269.4" y="205.4" width="7.5" height="22.6" style="--i:19"><title>IMG_1487.HEIC: 2.3 ms</title></rect><image class="thumb" href="../img/strip/IMG_1487.jpg?v=9daa9bda" x="267.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:19"/><rect class="bar" x="281.1" y="206.5" width="7.5" height="21.5" style="--i:20"><title>IMG_1651.HEIC: 2.1 ms</title></rect><image class="thumb" href="../img/strip/IMG_1651.jpg?v=f2630109" x="279.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:20"/><rect class="bar" x="292.9" y="186.7" width="7.5" height="41.3" style="--i:21"><title>IMG_1734.HEIC: 4.1 ms</title></rect><image class="thumb" href="../img/strip/IMG_1734.jpg?v=72e5984d" x="291.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:21"/><rect class="bar" x="304.6" y="181.1" width="7.5" height="46.9" style="--i:22"><title>IMG_1761.HEIC: 4.7 ms</title></rect><image class="thumb" href="../img/strip/IMG_1761.jpg?v=c64ad98d" x="303.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:22"/><rect class="bar" x="316.4" y="188.7" width="7.5" height="39.3" style="--i:23"><title>IMG_1786.HEIC: 3.9 ms</title></rect><image class="thumb" href="../img/strip/IMG_1786.jpg?v=c1a8fdc3" x="314.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:23"/><rect class="bar" x="328.1" y="191.2" width="7.5" height="36.8" style="--i:24"><title>IMG_1798.HEIC: 3.7 ms</title></rect><image class="thumb" href="../img/strip/IMG_1798.jpg?v=61e120aa" x="326.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:24"/><rect class="bar" x="339.9" y="173.1" width="7.5" height="54.9" style="--i:25"><title>IMG_1810.HEIC: 5.5 ms</title></rect><image class="thumb" href="../img/strip/IMG_1810.jpg?v=c96e533b" x="338.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:25"/><rect class="bar" x="351.6" y="192.4" width="7.5" height="35.6" style="--i:26"><title>IMG_1836.HEIC: 3.6 ms</title></rect><image class="thumb" href="../img/strip/IMG_1836.jpg?v=af5082f9" x="350.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:26"/><rect class="bar" x="363.4" y="200.0" width="7.5" height="28.0" style="--i:27"><title>IMG_1856.HEIC: 2.8 ms</title></rect><image class="thumb" href="../img/strip/IMG_1856.jpg?v=89304f9a" x="361.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:27"/><rect class="bar" x="375.1" y="199.2" width="7.5" height="28.8" style="--i:28"><title>IMG_1886.HEIC: 2.9 ms</title></rect><image class="thumb" href="../img/strip/IMG_1886.jpg?v=6a462543" x="373.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:28"/><rect class="bar" x="386.9" y="184.1" width="7.5" height="43.9" style="--i:29"><title>IMG_1918.HEIC: 4.4 ms</title></rect><image class="thumb" href="../img/strip/IMG_1918.jpg?v=c5e1b18c" x="385.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:29"/><rect class="bar" x="398.6" y="206.9" width="7.5" height="21.1" style="--i:30"><title>IMG_1957.HEIC: 2.1 ms</title></rect><image class="thumb" href="../img/strip/IMG_1957.jpg?v=1bf4f25a" x="397.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:30"/><rect class="bar" x="410.4" y="181.3" width="7.5" height="46.7" style="--i:31"><title>IMG_1969.HEIC: 4.7 ms</title></rect><image class="thumb" href="../img/strip/IMG_1969.jpg?v=a6fd7488" x="408.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:31"/><rect class="bar" x="422.1" y="186.3" width="7.5" height="41.7" style="--i:32"><title>IMG_2007.HEIC: 4.2 ms</title></rect><image class="thumb" href="../img/strip/IMG_2007.jpg?v=ca3344da" x="420.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:32"/><rect class="bar" x="433.9" y="185.1" width="7.5" height="42.9" style="--i:33"><title>IMG_2019.HEIC: 4.3 ms</title></rect><image class="thumb" href="../img/strip/IMG_2019.jpg?v=21826478" x="432.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:33"/><rect class="bar" x="445.6" y="195.0" width="7.5" height="33.0" style="--i:34"><title>IMG_2031.HEIC: 3.3 ms</title></rect><image class="thumb" href="../img/strip/IMG_2031.jpg?v=860bc7cc" x="444.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:34"/><rect class="bar" x="457.4" y="195.1" width="7.5" height="32.9" style="--i:35"><title>IMG_2048.HEIC: 3.3 ms</title></rect><image class="thumb" href="../img/strip/IMG_2048.jpg?v=d8867ad3" x="455.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:35"/><rect class="bar" x="469.1" y="180.8" width="7.5" height="47.2" style="--i:36"><title>IMG_2060.HEIC: 4.7 ms</title></rect><image class="thumb" href="../img/strip/IMG_2060.jpg?v=84eeccd7" x="467.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:36"/><rect class="bar" x="480.9" y="202.5" width="7.5" height="25.5" style="--i:37"><title>IMG_2072.HEIC: 2.5 ms</title></rect><image class="thumb" href="../img/strip/IMG_2072.jpg?v=633dbb43" x="479.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:37"/><rect class="bar" x="492.6" y="186.9" width="7.5" height="41.1" style="--i:38"><title>IMG_2088.HEIC: 4.1 ms</title></rect><image class="thumb" href="../img/strip/IMG_2088.jpg?v=f108a554" x="491.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:38"/><rect class="bar" x="504.4" y="196.4" width="7.5" height="31.6" style="--i:39"><title>IMG_2118.HEIC: 3.2 ms</title></rect><image class="thumb" href="../img/strip/IMG_2118.jpg?v=78ea9aa4" x="502.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:39"/><rect class="bar" x="516.1" y="181.9" width="7.5" height="46.1" style="--i:40"><title>IMG_2182.HEIC: 4.6 ms</title></rect><image class="thumb" href="../img/strip/IMG_2182.jpg?v=899ee1fe" x="514.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:40"/><rect class="bar" x="527.9" y="189.1" width="7.5" height="38.9" style="--i:41"><title>IMG_2198.HEIC: 3.9 ms</title></rect><image class="thumb" href="../img/strip/IMG_2198.jpg?v=846c0e27" x="526.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:41"/><rect class="bar" x="539.6" y="203.3" width="7.5" height="24.7" style="--i:42"><title>IMG_2210.HEIC: 2.5 ms</title></rect><image class="thumb" href="../img/strip/IMG_2210.jpg?v=c3bf97fb" x="538.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:42"/><rect class="bar" x="551.4" y="187.7" width="7.5" height="40.3" style="--i:43"><title>IMG_2222.HEIC: 4.0 ms</title></rect><image class="thumb" href="../img/strip/IMG_2222.jpg?v=6a841c56" x="549.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:43"/><rect class="bar" x="563.1" y="184.8" width="7.5" height="43.2" style="--i:44"><title>IMG_2237.HEIC: 4.3 ms</title></rect><image class="thumb" href="../img/strip/IMG_2237.jpg?v=c3d8822d" x="561.5" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:44"/><rect class="bar" x="574.9" y="184.7" width="7.5" height="43.3" style="--i:45"><title>IMG_2297.HEIC: 4.3 ms</title></rect><image class="thumb" href="../img/strip/IMG_2297.jpg?v=ad3fb513" x="573.2" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:45"/><rect class="bar" x="586.6" y="187.4" width="7.5" height="40.6" style="--i:46"><title>IMG_2309.HEIC: 4.1 ms</title></rect><image class="thumb" href="../img/strip/IMG_2309.jpg?v=a11ec372" x="585.0" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:46"/><rect class="bar" x="598.4" y="143.4" width="7.5" height="84.6" style="--i:47"><title>IMG_2336.HEIC: 8.5 ms</title></rect><image class="thumb" href="../img/strip/IMG_2336.jpg?v=13b99d4d" x="596.8" y="234" width="10.8" height="24" preserveAspectRatio="xMidYMid slice" style="--i:47"/><line class="budget" x1="44" x2="608" y1="68.0" y2="68.0"/><line class="median" x1="44" x2="608" y1="188.7" y2="188.7"/><text class="note" x="618" y="65.0">budget 16 ms</text><text class="note sub" x="618" y="81.0">from the spec</text><text class="note strong" x="618" y="192.7">median 3.9 ms</text><text class="tick" x="44" y="286">48 photos in the order the arrow key reached them</text></svg>
+<figcaption>Time to show the next photo for 48 of my photos</figcaption>
+</figure>
+<div class="req">
+<table>
+<tbody>
+<tr><th scope="row">Start to the first photo</th><td class="b">195&ndash;235 ms</td></tr>
+<tr><th scope="row">Next photo, median / p95</th><td class="b">5.6 / 6.4 ms</td></tr>
+<tr><th scope="row">Arrow key held down</th><td class="b">5 ms a frame</td></tr>
+<tr><th scope="row">HEIC to JPEG</th><td class="b">400 photos in 9 s</td></tr>
+<tr><th scope="row">Memory when idle</th><td class="b">104 MB</td></tr>
+</tbody>
+</table>
+<p>MacBook with Apple M5 and 16 GB, release build, 12-megapixel HEIC files.</p>
 </div>
 </div>
 
-<div class="block">
-<h2>Screenshots</h2>
-<div class="body gallery">
-<figure class="shot wide"><a href="../img/bolt-view.jpg?v=f54c201f"><img src="../img/bolt-view-t.jpg?v=456ad4f0" alt="A folder of my photos from Tbilisi. The bottom line shows the photo&rsquo;s place in the folder, size and date." loading="lazy"></a><figcaption>A folder of my photos from Tbilisi. The bottom line shows the photo&rsquo;s place in the folder, size and date. <span class="meta">1600×915, 288 KB</span></figcaption></figure>
-<figure class="shot"><a href="../img/bolt-grid.jpg?v=4ecd565f"><img src="../img/bolt-grid-t.jpg?v=3cc2e5b6" alt="Thumbnail grid, G." loading="lazy"></a><figcaption>Thumbnail grid, <kbd>G</kbd>. <span class="meta">1600×915, 274 KB</span></figcaption></figure>
-<figure class="shot"><a href="../img/bolt-compare.jpg?v=5fd910dc"><img src="../img/bolt-compare-t.jpg?v=1196485a" alt="Three photos side by side, K." loading="lazy"></a><figcaption>Three photos side by side, <kbd>K</kbd>. <span class="meta">1600×915, 211 KB</span></figcaption></figure>
-<figure class="shot"><a href="../img/bolt-info.jpg?v=481d7771"><img src="../img/bolt-info-t.jpg?v=e3fb47ae" alt="Information panel, I." loading="lazy"></a><figcaption>Information panel, <kbd>I</kbd>. <span class="meta">1600×915, 302 KB</span></figcaption></figure>
-<figure class="shot"><a href="../img/bolt-keys.jpg?v=045584a7"><img src="../img/bolt-keys-t.jpg?v=05bc1410" alt="All keys, ?." loading="lazy"></a><figcaption>All keys, <kbd>?</kbd>. <span class="meta">1600×915, 202 KB</span></figcaption></figure>
-</div>
-</div>
+<h2>Sorting with one key</h2>
+<ul class="feat">
+<li><kbd>Delete</kbd> sends the photo to the Trash with no dialog, and the next one is already on screen.</li>
+<li><kbd>1</kbd>&ndash;<kbd>9</kbd> move the photo to folders you assign, with <kbd>&#8997;</kbd> they copy it. An unassigned key opens a folder picker with fuzzy search, where you can also type a new folder.</li>
+<li><kbd>P</kbd> <kbd>X</kbd> <kbd>U</kbd> mark a photo as a pick or a reject, <kbd>&#8963;1</kbd>&ndash;<kbd>5</kbd> rate it. The marks are kept in Finder tags, the files aren&rsquo;t touched. Later you show only the rejects, select them all and delete.</li>
+<li><kbd>Shift</kbd> with the arrows selects a series, and any key then acts on all of it; <kbd>.</kbd> repeats the last action.</li>
+<li>RAW and its JPEG, both halves of a Live Photo and the iPhone&rsquo;s IMG_E copies move together.</li>
+<li>Zoom and position stay as you flip, so a series is easy to check for sharpness. <kbd>K</kbd> puts 2 to 4 photos side by side with one zoom.</li>
+<li>Keys follow their place on the keyboard, so they work in any layout. There are key profiles of IrfanView and Lightroom, and any key can be changed.</li>
+</ul>
+<figure class="shot"><a href="../img/bolt-series-grid.jpg?v=25b45c18"><img src="../img/bolt-series-grid-t.jpg?v=11796dec" alt="The grid, G, with six shots of the same balconies selected. One key now acts on all six." loading="lazy"></a><figcaption>The grid, <kbd>G</kbd>, with six shots of the same balconies selected. One key now acts on all six. <span class="meta">1600×736, 225 KB</span></figcaption></figure>
+
+<h2>Batch work</h2>
+<ul class="feat">
+<li><kbd>E</kbd> exports with the last preset, for example &ldquo;Telegram: JPEG 85%, 2560 px, no geotags&rdquo;; <kbd>Shift</kbd><kbd>E</kbd> picks another one.</li>
+<li>Convert to JPEG, HEIC, AVIF, PNG or TIFF, resize by the long side, rename by a template such as <code>{date:yyyy-MM-dd_HHmmss}_{counter:3}</code> with a preview before anything changes.</li>
+<li>GPS and serial numbers are removed without re-encoding the photo.</li>
+<li>A batch runs on all cores in the background while you keep viewing, and it is one step in the undo history. 400 HEIC photos become JPEG in 9 seconds.</li>
+<li>The same works from the command line, with <code>bolt convert</code> and <code>bolt rename</code>, for scripts and Shortcuts.</li>
+</ul>
+
+<h2>Nothing gets lost</h2>
+<ul class="feat">
+<li>No operation deletes a file past the Trash or writes over an existing one; a clashing name gets &ldquo;(2)&rdquo;.</li>
+<li><kbd>&#8984;Z</kbd> undoes any file action, back to the first one you made.</li>
+<li>Rotating and flipping change only the Orientation tag. A test checks that the pixels stay the same, byte for byte.</li>
+<li>Edits are saved as a copy next to the original. If you choose to replace originals, the original goes to the Trash first.</li>
+</ul>
+
+<p class="status">Not released yet, because it needs an Apple Developer ID to be signed and notarized. Swift 6 and AppKit, no third-party code. I wrote the spec; Claude Code wrote the app in one night.</p>
 </main>
-<footer class="wrap">
-<p>Boris Timofeenko, <a href="mailto:timofeenkoboris@gmail.com">timofeenkoboris@gmail.com</a>. The 0 in b0ris is a zero.</p>
-<p>No cookies, no analytics. Updated 11 November 2026.</p>
-</footer>
-<script src="../charts.js?v=f845eb19" defer></script>
-
+<script src="../v/disc/disc.js?v=1e49873c"></script>
 </body>
 </html>
