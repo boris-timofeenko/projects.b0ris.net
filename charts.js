@@ -1,8 +1,7 @@
 // Starts a chart's animation when it scrolls into view. Without this file the charts are simply drawn.
 (function () {
   var charts = document.querySelectorAll(".chart");
-  var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (still || !("IntersectionObserver" in window)) {
+  if (!("IntersectionObserver" in window)) {
     charts.forEach(function (c) { c.classList.add("play"); });
     return;
   }
