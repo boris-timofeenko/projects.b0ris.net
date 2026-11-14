@@ -3,74 +3,142 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ne-slop-text, a Claude Code skill for writing</title>
-<meta name="description" content="A Claude Code skill that finds where default models land for a writing task and moves the draft away from there. Tested blind on the author's own texts.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="ne-slop-text, a Claude Code skill for writing">
-<meta property="og:description" content="A Claude Code skill that finds where default models land for a writing task and moves the draft away from there. Tested blind on the author's own texts.">
-<meta property="og:url" content="https://projects.b0ris.net/ne-slop-text/">
+<meta name="robots" content="noindex">
+<title>ne-slop-text: b0ris.net</title>
+<meta name="description" content="ne-slop-text, a Claude Code skill that writes from your own material and edits only the sentences a default model would write too. Tested blind on its author.">
 <link rel="icon" href="../favicon.svg?v=b2645dfd" type="image/svg+xml">
-<link rel="preload" href="../fonts/xcharter-roman.woff2?v=bc0db4ed" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../site.css?v=2620b037">
-<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../v/disc/disc.css?v=6da0a4ae">
+<style>
+/* A project opened from the menu, the way a game pauses: the room of the projects menu behind, dimmed; the project's 3D
+   card from the list of all projects turning slowly. The texts compared side by side are printed on the white of the
+   CV's boxes, ne-slop-text's own in the yellow the Bolt page gives Bolt. */
+html { background: #000022; -webkit-text-size-adjust: 100%; }
+body { margin: 0; min-height: 100vh; color: #CCEEFF; font: 17px/1.5 Arial, Helvetica, sans-serif;
+  background: linear-gradient(rgba(0,0,30,0.8), rgba(0,0,30,0.8)), #000022 url(../v/proto/menu-room.jpg?v=ae94d8cd) center / cover fixed; }
+a { color: #99CCFF; } a:hover { color: #FFFF66; }
+.page { max-width: 1040px; margin: 0 auto; padding: 30px 20px 56px; }
+.head { display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 10px 32px; align-items: center; margin: 0 0 26px; }
+.slab { display: block; width: 400px; max-width: 100%; aspect-ratio: 400 / 275; background: url(../v/disc/card-neslop.webp?v=f66e1dba) 0 0 / 800% 100% no-repeat; animation: turn 2.4s steps(8, jump-none) infinite alternate; }
+@keyframes turn { from { background-position-x: 0%; } to { background-position-x: 100%; } }
+h1 { margin: 0 0 8px; font: 52px/1 "Arial Black", "Arial Bold", Arial, sans-serif; color: #FFF; text-shadow: 3px 3px 0 #000; overflow-wrap: anywhere; }
+.lead { margin: 0; font-size: 21px; line-height: 1.4; color: #FFFF66; font-weight: bold; }
+.go { margin: 16px 0 0; }
+.go a { display: inline-block; margin: 0 14px 6px 0; padding: 5px 14px; color: #000033; background: #FFFF66; font: 17px "Arial Rounded MT Bold", "Arial Black", Arial, sans-serif; text-decoration: none; box-shadow: 3px 3px 0 #000; }
+.go a:hover { background: #FFFFFF; color: #000033; }
+.go a.src { padding: 5px 0; color: #99CCFF; background: none; box-shadow: none; font: inherit; text-decoration: underline; }
+.go a.src:hover { color: #FFFF66; }
+.page > p, .page > .feat, .page > .req, .page > pre { max-width: 782px; box-sizing: border-box; }
+.page > p { margin: 0 0 1.2em; }
+code { font: 0.9em Menlo, Monaco, monospace; color: #FFFF99; }
+pre { margin: 0 0 1.4em; padding: 12px 14px; background: #000; border-left: 4px solid #6699CC; color: #CCEEFF; font: 14px/1.45 Menlo, Monaco, monospace; overflow-x: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+pre code { font: inherit; color: inherit; }
+/* lists: the stars of the back of the box, as on the CV */
+.feat { list-style: none; margin: 0 0 1.4em; padding: 0; }
+.feat li { position: relative; padding-left: 26px; margin: 0 0 10px; }
+.feat li::before { content: "\2605"; position: absolute; left: 0; top: 0; color: #FFCC00; }
+figure.shot { margin: 8px 0 28px; color: #CCEEFF; font-size: 15px; line-height: 1.4; }
+figure.shot .meta { display: none; }
+figure.shot img { display: block; width: 100%; height: auto; border: 2px solid #6699CC; box-shadow: 6px 6px 0 #000; margin: 0 0 10px; box-sizing: border-box; }
+/* one paragraph three ways, side by side */
+.ex { margin: 8px 0 28px; }
+.ex .three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: start; }
+.ex blockquote { margin: 0; padding: 12px 14px 14px; background: #FFF; color: #000; font-size: 15px; line-height: 1.45; box-shadow: 6px 6px 0 #000; }
+.ex blockquote.ours { background: #FFFF99; }
+.ex blockquote b { display: block; margin: 0 0 6px; font: 13px/1.2 "Arial Black", "Arial Bold", Arial, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; color: #000033; }
+.ex blockquote p { margin: 0; }
+.ex mark { background: #FFCCCC; color: inherit; padding: 0 1px; }
+.ex figcaption { margin: 14px 0 0; font-size: 15px; line-height: 1.4; max-width: 782px; }
+.status { margin: 44px 0 0; max-width: 782px; box-sizing: border-box; padding: 12px 16px; background: #000; border-left: 4px solid #FFCC00; color: #FFF; }
+/* section names: the yellow tag of the CV */
+h2 { display: inline-block; margin: 36px 0 16px; padding: 4px 12px 3px; background: #FFCC00; color: #000033; font: 17px/1.25 "Arial Black", "Arial Bold", Arial, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; box-shadow: 3px 3px 0 #000; }
+/* tables: the white box of the CV */
+.req { margin: 8px 0 28px; background: #FFF; color: #000; padding: 14px 16px 12px; font-size: 15px; line-height: 1.35; box-shadow: 6px 6px 0 #000; }
+.req.narrow { max-width: 30em; }
+.req table { width: 100%; border-collapse: collapse; }
+.req th, .req td { padding: 6px 6px 6px 0; text-align: left; vertical-align: top; border-bottom: 1px solid #CCC; }
+.req thead th { font-size: 13px; border-bottom: 2px solid #000; }
+.req tbody th { font-weight: normal; }
+.req .n { text-align: right; padding-left: 10px; white-space: nowrap; font-variant-numeric: tabular-nums; font-weight: bold; }
+.req p { margin: 10px 0 0; font-size: 13px; color: #333; }
+
+@media (max-width: 860px) {
+  .head { grid-template-columns: minmax(0, 1fr); } .slab { margin: 0 auto; } h1 { font-size: 40px; }
+  .ex .three { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 600px) {
+  .page { padding: 18px 16px 40px; } .lead { font-size: 19px; } h1 { font-size: 34px; }
+  .req { padding: 12px 12px 10px; font-size: 14px; }
+  pre { font-size: 12px; }
+}
+</style>
 </head>
-<body>
-<header class="top wrap">
-<a class="mark" href="https://b0ris.net/">b<span class="zero">0</span>ris.net</a>
-<nav>
-<a href="https://b0ris.net/" data-nav="cv">CV</a>
-<a href="https://projects.b0ris.net/" data-nav="projects" aria-current="page">Projects</a>
-<a href="https://b0ris.net/boris-timofeenko-cv.pdf">CV as PDF</a>
-<a href="https://github.com/boris-timofeenko">GitHub</a>
+<body data-page="projects">
+<nav class="bar" aria-label="Disc">
+<a href="https://b0ris.net/projects/" data-back><kbd>Esc</kbd> Projects</a>
+<span class="gap"></span>
+<a href="https://b0ris.net/cv/" data-nav="cv">CV</a>
+<a href="https://b0ris.net/projects/" data-nav="projects">Projects</a>
+<a href="https://b0ris.net/contacts/" data-nav="contacts">Contacts</a>
 </nav>
-</header>
+<main class="page">
+<div class="head">
+<span class="slab" role="img" aria-label="The ne-slop-text blind test, on a card"></span>
+<div><h1>ne-slop-text</h1><p class="lead">A Claude Code skill that writes a text from your own material and then edits only the sentences that three default models would write too.</p>
+<p class="go"><a href="https://github.com/boris-timofeenko/ne-slop-text#install">Install &#9654;</a><a class="src" href="https://github.com/boris-timofeenko/ne-slop-text">Source on GitHub</a></p></div>
+</div>
 
-<main class="wrap">
-<header class="head">
-<p class="kicker"><a href="https://projects.b0ris.net/">Projects</a> / ne-slop-text</p>
-<h1>ne-slop-text</h1>
-<p class="lede">A Claude Code skill for writing text that reads as written by a particular person.</p>
-</header>
+<p>I made a quest game, Belgrade 2026, and its graphics came out alive: photos from my phone ruined by a script, characters drawn in code, a hero cut out of a friend&rsquo;s photo with the white fringe of the magic eraser left on. That became my ne-slop skill for creative work. For text it was not enough, and text run through the popular humanizer skill I could spot from a mile away.</p>
+<p>Humanizer and skills like it work from lists of words and patterns. The text loses &ldquo;delve&rdquo; and the em dashes but keeps the skeleton a model gives it: the same opening, the same lesson at the end. ne-slop-text starts from the other end. It finds where models land by default for this exact task and moves the draft away from there.</p>
 
-<figure class="feature">
-<svg class="chart neslop full" viewBox="0 0 720 296" role="img" aria-label="For each page of this site: how many questionnaire features lean machine-like in three default texts, in the first draft and after the revision" preserveAspectRatio="xMidYMid meet"><line class="grid" x1="130.0" x2="130.0" y1="24" y2="278"/><text class="tick" x="130.0" y="18" text-anchor="middle">0</text><line class="grid" x1="187.4" x2="187.4" y1="24" y2="278"/><text class="tick" x="187.4" y="18" text-anchor="middle">1</text><line class="grid" x1="244.8" x2="244.8" y1="24" y2="278"/><text class="tick" x="244.8" y="18" text-anchor="middle">2</text><line class="grid" x1="302.2" x2="302.2" y1="24" y2="278"/><text class="tick" x="302.2" y="18" text-anchor="middle">3</text><line class="grid" x1="359.6" x2="359.6" y1="24" y2="278"/><text class="tick" x="359.6" y="18" text-anchor="middle">4</text><line class="grid" x1="417.0" x2="417.0" y1="24" y2="278"/><text class="tick" x="417.0" y="18" text-anchor="middle">5</text><line class="grid" x1="474.4" x2="474.4" y1="24" y2="278"/><text class="tick" x="474.4" y="18" text-anchor="middle">6</text><line class="grid" x1="531.8" x2="531.8" y1="24" y2="278"/><text class="tick" x="531.8" y="18" text-anchor="middle">7</text><line class="grid" x1="589.2" x2="589.2" y1="24" y2="278"/><text class="tick" x="589.2" y="18" text-anchor="middle">8</text><line class="grid" x1="646.6" x2="646.6" y1="24" y2="278"/><text class="tick" x="646.6" y="18" text-anchor="middle">9</text><line class="grid" x1="704.0" x2="704.0" y1="24" y2="278"/><text class="tick" x="704.0" y="18" text-anchor="middle">10</text><text class="row" x="116" y="59.0" text-anchor="end">CV</text><line class="lane" x1="130" x2="704" y1="54.0" y2="54.0"/><circle class="default" cx="474.4" cy="49.0" r="4"/><circle class="default" cx="646.6" cy="54.0" r="4"/><circle class="default" cx="589.2" cy="59.0" r="4"/><line class="move" x1="589.2" x2="302.2" y1="54.0" y2="54.0" style="--i:0"/><circle class="draft" cx="589.2" cy="54.0" r="5.5"/><circle class="rev" cx="302.2" cy="54.0" r="5.5" style="--i:0"/><text class="row" x="116" y="99.0" text-anchor="end">Bolt</text><line class="lane" x1="130" x2="704" y1="94.0" y2="94.0"/><circle class="default" cx="244.8" cy="89.0" r="4"/><circle class="default" cx="244.8" cy="94.0" r="4"/><circle class="default" cx="359.6" cy="99.0" r="4"/><line class="move" x1="244.8" x2="187.4" y1="94.0" y2="94.0" style="--i:1"/><circle class="draft" cx="244.8" cy="94.0" r="5.5"/><circle class="rev" cx="187.4" cy="94.0" r="5.5" style="--i:1"/><text class="row" x="116" y="139.0" text-anchor="end">uvcdv-capture</text><line class="lane" x1="130" x2="704" y1="134.0" y2="134.0"/><circle class="default" cx="302.2" cy="129.0" r="4"/><circle class="default" cx="302.2" cy="134.0" r="4"/><circle class="default" cx="302.2" cy="139.0" r="4"/><line class="move" x1="359.6" x2="244.8" y1="134.0" y2="134.0" style="--i:2"/><circle class="draft" cx="359.6" cy="134.0" r="5.5"/><circle class="rev" cx="244.8" cy="134.0" r="5.5" style="--i:2"/><text class="row" x="116" y="179.0" text-anchor="end">ne-slop-text</text><line class="lane" x1="130" x2="704" y1="174.0" y2="174.0"/><circle class="default" cx="302.2" cy="169.0" r="4"/><circle class="default" cx="302.2" cy="174.0" r="4"/><circle class="default" cx="302.2" cy="179.0" r="4"/><line class="move" x1="417.0" x2="359.6" y1="174.0" y2="174.0" style="--i:3"/><circle class="draft" cx="417.0" cy="174.0" r="5.5"/><circle class="rev" cx="359.6" cy="174.0" r="5.5" style="--i:3"/><text class="row" x="116" y="219.0" text-anchor="end">GdeParkovka</text><line class="lane" x1="130" x2="704" y1="214.0" y2="214.0"/><circle class="default" cx="302.2" cy="209.0" r="4"/><circle class="default" cx="417.0" cy="214.0" r="4"/><circle class="default" cx="359.6" cy="219.0" r="4"/><line class="move" x1="187.4" x2="187.4" y1="214.0" y2="214.0" style="--i:4"/><circle class="draft" cx="187.4" cy="214.0" r="5.5"/><circle class="rev" cx="187.4" cy="214.0" r="5.5" style="--i:4"/><text class="row" x="116" y="259.0" text-anchor="end">Genealogy</text><line class="lane" x1="130" x2="704" y1="254.0" y2="254.0"/><circle class="default" cx="359.6" cy="249.0" r="4"/><circle class="default" cx="359.6" cy="254.0" r="4"/><circle class="default" cx="359.6" cy="259.0" r="4"/><line class="move" x1="417.0" x2="244.8" y1="254.0" y2="254.0" style="--i:5"/><circle class="draft" cx="417.0" cy="254.0" r="5.5"/><circle class="rev" cx="244.8" cy="254.0" r="5.5" style="--i:5"/><text class="tick" x="130" y="292">features that lean machine-like, of the 24 that have a lean</text></svg>
-<ul class="legend">
-<li><span class="key default"></span>three models writing the same page with no method</li>
-<li><span class="key draft"></span>first draft</li>
-<li><span class="key rev"></span>after the revision</li>
+<h2>What it does</h2>
+<ul class="feat">
+<li>Writes from your material, not from the task alone: notes, a CV, a job ad, and best of all a transcript of you answering a couple of questions out loud, in any language.</li>
+<li>Puts down a skeleton of 3 to 5 beats first. Every later edit has to keep them, so the story doesn&rsquo;t fall apart into a list of facts.</li>
+<li>Has three fresh agents on Opus, Sonnet and Haiku write the same task with no method. These are the defaults, the place where a model lands by itself.</li>
+<li>Marks what the draft takes from all three defaults at once: the same opening, the same moral, the same figure from Google.</li>
+<li>Edits only those sentences, and edits rather than deletes. A checker makes sure no fact got blurred and the beats are still there; a reader agent makes sure the text is still clear.</li>
+<li>Asks a guard one question: is the draft still in the machine cloud of its task? The number is never the goal; why is below.</li>
+<li>Finishes with a surface lint in English and Russian, built on the word and pattern lists of humanizer and unslop.</li>
+<li>Gives back the text, a few lines on what changed and why, and the questions your material couldn&rsquo;t answer. Your files stay untouched.</li>
 </ul>
-<figcaption>The six pages of this site, scored on the skill&rsquo;s questionnaire: how many of its features lean machine-like. One annotator marked all five versions of each page in one pass. The ne-slop-text page itself started worse than the three defaults and is still above them.</figcaption>
+
+<h2>One paragraph, three ways</h2>
+<figure class="ex">
+<div class="three">
+<blockquote><b>Sonnet, no method</b><p><mark>One of the most valuable tests I&rsquo;ve written as a QA tech lead caught a bug that no one would have thought to look for.</mark> Our fintech product has an AI onboarding agent in WhatsApp that registers new users, and on its first prototype the LLM didn&rsquo;t know today&rsquo;s date. Because of that, it refused registration to people who had turned 18 only about a month earlier. I knew that language models don&rsquo;t reliably know the current date, so I wrote a test for exactly that age boundary, and it failed on the prototype. <mark>It&rsquo;s a good reminder that when you test AI systems, you have to think about what the model fundamentally can&rsquo;t know</mark>, and that&rsquo;s why we also check the agent&rsquo;s answers with LLM-as-a-judge.</p></blockquote>
+<blockquote><b>The same through humanizer</b><p><mark>One of the best tests I&rsquo;ve written as a QA tech lead caught a bug nobody would have thought to look for.</mark> Our fintech product has an AI onboarding agent in WhatsApp that registers new users. On the first prototype the LLM didn&rsquo;t know today&rsquo;s date, so it refused to register people who had turned 18 only about a month earlier. Language models don&rsquo;t reliably know the current date. I knew that, so I wrote a test right on that age boundary, and the prototype failed it. <mark>With AI systems you have to think about what the model can&rsquo;t know</mark>, and that&rsquo;s why we also check the agent&rsquo;s answers with LLM-as-a-judge.</p></blockquote>
+<blockquote class="ours"><b>The same through ne-slop-text</b><p>I had to test the very first prototype of the AI agent that registers new users in WhatsApp for our fintech product. I know that a neural net doesn&rsquo;t always know what today&rsquo;s date is. If someone has only just turned 18, they should already be able to register, but the neural net didn&rsquo;t know the exact date and blocked registration for people a little over 18, by about a month. So I wrote a test that would fail on exactly that, and on the prototype it failed.</p></blockquote>
+</div>
+<figcaption>The task: one paragraph for a LinkedIn post about a bug we caught; the material, my spoken answer in Russian. Real runs of version 1, not edited by hand. Humanizer keeps &ldquo;one of the best tests&rdquo; and the closing lesson (in pink). ne-slop-text puts my own sentence in their place, &ldquo;a neural net doesn&rsquo;t always know what today&rsquo;s date is&rdquo;, from &ldquo;нейронка не всегда знает, какое сегодня число&rdquo;, and stops where the test fails.</figcaption>
 </figure>
 
-<div class="cols">
-<dl class="facts">
-<dt>Released</dt><dd>7 November 2026</dd>
-<dt>Runs in</dt><dd>Claude Code. The scripts need Python 3 and nothing else.</dd>
-<dt>Source</dt><dd><a href="https://github.com/boris-timofeenko/ne-slop-text">GitHub</a></dd>
-<dt>Cost</dt><dd>6 to 8 agent calls and a few minutes for a longer text</dd>
-</dl>
-<div class="prose">
+<h2>How I tested it</h2>
+<p>I built it with Claude on my own texts, a CV and letters to employers, and tested it blind on myself. The test page shuffles the variants and evens out the typography, because once a human original was the only text with an em dash, and I put it last.</p>
+<p>Version 1 fixed only what the draft shared with all three defaults. In a letter to a hiring team it moved the draft from third place to first. The two Opus letters in that test had the same skeleton down to the closing line, &ldquo;I&rsquo;d be glad to have that coffee&rdquo;.</p>
+<p>Version 2 started with a night experiment. Three agents collected 139 texts by 37 talented authors written before 2022 and rebuilt the task behind each, and Opus, Sonnet and Haiku wrote every task too: 417 defaults. A model learned which sentence moves separate the two sides. On the model side, glosses, morals, signposts and recap endings. On the human side, asides, questions, irony and quoted speech.</p>
+<div class="req narrow">
+<table>
+<thead><tr><th>Authors it had not seen</th><th class="n">Pairs ordered right, of 100</th></tr></thead>
+<tbody>
+<tr><th scope="row">Letters</th><td class="n">92</td></tr>
+<tr><th scope="row">Russian business prose</th><td class="n">95</td></tr>
+<tr><th scope="row">Engineering posts</th><td class="n">78</td></tr>
+</tbody>
+</table>
+<p>A pair is one human text and one default for the same task; the metric is right when it puts the human one further from the machine side.</p>
+</div>
+<p>Then the loop drove texts down that scale, and they got worse. The metric&rsquo;s order matched mine about as often as chance, and three times its top pick was my last. The reviser had cut every link and frame, and a story became a list of facts. What worked was structure: the beats that every edit keeps, edits instead of deletions, the reader&rsquo;s clarity floor and the truth check. With those the new loop came second on both of the last two pages and never last. The metric stayed only as the guard.</p>
+<figure class="shot"><a href="../img/neslop-blind.jpg?v=f272b244"><img src="../img/neslop-blind-t.jpg?v=b5be5c0a" alt="The blind-test page. The variants are shuffled; a click marks a sentence as slop or alive." loading="lazy"></a><figcaption>The blind-test page. The variants are shuffled; a click marks a sentence as slop or alive. <span class="meta">1600×1125, 179 KB</span></figcaption></figure>
+
+<h2>How to use it</h2>
 <pre><code>git clone https://github.com/boris-timofeenko/ne-slop-text ~/.claude/skills/ne-slop-text</code></pre>
-<p>Then ask Claude Code to write &ldquo;ne-slop&rdquo;, or run <code>/ne-slop-text</code>.</p>
-<p>I made a quest game, Belgrade 2026, and its graphics came out alive. The hero was cut out of a friend&rsquo;s photo with the white fringe of the magic eraser left on. That became my ne-slop skill for creative work. For text it was not enough, and text run through the popular humanizer skill I could spot from a mile away.</p>
-<p>I built ne-slop-text with Claude on my own texts and tested it blind on myself. For each task three fresh agents on different models write the text with no method, and an annotator marks the draft and these defaults on a questionnaire of 26 discourse features, seeded from the StoryScope paper (Russell et al., COLM 2026), where narrative decisions alone told AI from human stories at 93% F1.</p>
-<p>In the last round, a message to a hiring team, four default writers got the same material, and the two Opus letters had the same skeleton down to the closing line, &ldquo;I&rsquo;d be glad to have that coffee&rdquo;. Where the draft did the same machine-like things as every default, the reviser cut three clever turns and three of four phrases quoted from the job ad. The draft moved from third place to first. The plain Opus letter came last, and I recognised it.</p>
-<p>That is one judge, three tasks and one domain so far, so the numbers show a direction.</p>
-</div>
-</div>
+<p>Then ask Claude Code to write or fix a text &ldquo;ne-slop&rdquo;, or run <code>/ne-slop-text</code> with the task and whatever material you have:</p>
+<pre><code>/ne-slop-text write a message to the hiring team for this job: &lt;link&gt;. My CV is cv.pdf. What I said about the project: &lt;transcript&gt;
+/ne-slop-text fix this paragraph: &lt;text&gt;. What actually happened: &lt;notes&gt;</code></pre>
+<p>Texts under about 120 words skip the loop. Longer ones take 14 to 18 agent calls and 10 to 15 minutes. The scripts need Python 3 and nothing else.</p>
 
-<div class="block">
-<h2>Screenshot</h2>
-<div class="body gallery">
-<figure class="shot wide"><a href="../img/neslop-blind.jpg?v=f272b244"><img src="../img/neslop-blind-t.jpg?v=4ff4eab0" alt="The blind-test page. Variants are shuffled; a click marks a sentence as slop or alive." loading="lazy"></a><figcaption>The blind-test page. Variants are shuffled; a click marks a sentence as slop or alive. <span class="meta">1600×1125, 179 KB</span></figcaption></figure>
-</div>
-</div>
+<p class="status">One judge, a handful of tasks, mostly about work, so the numbers show a direction. Every round, including what failed, is in <a href="https://github.com/boris-timofeenko/ne-slop-text/blob/main/docs/evidence.md">docs/evidence.md</a>.</p>
 </main>
-<footer class="wrap">
-<p>Boris Timofeenko, <a href="mailto:timofeenkoboris@gmail.com">timofeenkoboris@gmail.com</a>. The 0 in b0ris is a zero.</p>
-<p>No cookies, no analytics. Updated 13 November 2026.</p>
-</footer>
-<script src="../charts.js?v=4340d822" defer></script>
-
+<script src="../v/disc/disc.js?v=6a7d03bd"></script>
 </body>
 </html>

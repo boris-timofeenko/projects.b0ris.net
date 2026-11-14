@@ -3,36 +3,93 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>uvcdv-capture, MiniDV over USB on a modern Mac</title>
-<meta name="description" content="Lossless MiniDV capture over USB on a Mac without FireWire: a userspace UVC DV driver on libusb, with tape control, scene splitting and a native app.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="uvcdv-capture, MiniDV over USB on a modern Mac">
-<meta property="og:description" content="Lossless MiniDV capture over USB on a Mac without FireWire: a userspace UVC DV driver on libusb, with tape control, scene splitting and a native app.">
-<meta property="og:url" content="https://projects.b0ris.net/uvcdv-capture/">
+<meta name="robots" content="noindex">
+<title>uvcdv-capture: b0ris.net</title>
+<meta name="description" content="uvcdv-capture captures MiniDV tapes over USB on a Mac without FireWire, bit for bit, with tape control, scene splitting and a native app.">
 <link rel="icon" href="../favicon.svg?v=b2645dfd" type="image/svg+xml">
-<link rel="preload" href="../fonts/xcharter-roman.woff2?v=bc0db4ed" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../site.css?v=2620b037">
-<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="../v/disc/disc.css?v=6da0a4ae">
+<style>
+/* A project opened from the menu, the way a game pauses: the room of the projects menu behind, dimmed; the project's 3D
+   card from the list of all projects turning slowly. Under the text, my own tape twice, as captured and through
+   --vhs, with a divider to drag; the app in a plain screenshot. */
+html { background: #000022; -webkit-text-size-adjust: 100%; }
+body { margin: 0; min-height: 100vh; color: #CCEEFF; font: 17px/1.5 Arial, Helvetica, sans-serif;
+  background: linear-gradient(rgba(0,0,30,0.8), rgba(0,0,30,0.8)), #000022 url(../v/proto/menu-room.jpg?v=ae94d8cd) center / cover fixed; }
+a { color: #99CCFF; } a:hover { color: #FFFF66; }
+.page { max-width: 1040px; margin: 0 auto; padding: 30px 20px 56px; }
+.head { display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 10px 32px; align-items: center; margin: 0 0 26px; }
+.slab { display: block; width: 400px; max-width: 100%; aspect-ratio: 400 / 275; background: url(../v/disc/card-uvcdv.webp?v=923b9edc) 0 0 / 800% 100% no-repeat; animation: turn 2.4s steps(8, jump-none) infinite alternate; }
+@keyframes turn { from { background-position-x: 0%; } to { background-position-x: 100%; } }
+h1 { margin: 0 0 8px; font: 52px/1 "Arial Black", "Arial Bold", Arial, sans-serif; color: #FFF; text-shadow: 3px 3px 0 #000; overflow-wrap: anywhere; }
+.lead { margin: 0; font-size: 21px; line-height: 1.4; color: #FFFF66; font-weight: bold; }
+.go { margin: 16px 0 0; }
+.go a { display: inline-block; margin: 0 14px 6px 0; padding: 5px 14px; color: #000033; background: #FFFF66; font: 17px "Arial Rounded MT Bold", "Arial Black", Arial, sans-serif; text-decoration: none; box-shadow: 3px 3px 0 #000; }
+.go a:hover { background: #FFFFFF; color: #000033; }
+.go a.src { padding: 5px 0; color: #99CCFF; background: none; box-shadow: none; font: inherit; text-decoration: underline; }
+.go a.src:hover { color: #FFFF66; }
+.page > p, .page > .feat, .page > .req, .page > pre { max-width: 782px; box-sizing: border-box; }
+.page > p { margin: 0 0 1.2em; }
+code { font: 0.9em Menlo, Monaco, monospace; color: #FFFF99; }
+pre { margin: 0 0 1.4em; padding: 12px 14px; background: #000; border-left: 4px solid #6699CC; color: #CCEEFF; font: 14px/1.45 Menlo, Monaco, monospace; overflow-x: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+pre code { font: inherit; color: inherit; }
+/* lists: the stars of the back of the box, as on the CV */
+.feat { list-style: none; margin: 0 0 1.4em; padding: 0; }
+.feat li { position: relative; padding-left: 26px; margin: 0 0 10px; }
+.feat li::before { content: "\2605"; position: absolute; left: 0; top: 0; color: #FFCC00; }
+figure.shot { margin: 8px 0 28px; color: #CCEEFF; font-size: 15px; line-height: 1.4; }
+figure.shot .meta { display: none; }
+figure.shot img { display: block; width: 100%; height: auto; border: 2px solid #6699CC; box-shadow: 6px 6px 0 #000; margin: 0 0 10px; box-sizing: border-box; }
+/* the tape, as captured and through --vhs: two videos playing in step, a divider to drag */
+.tape { margin: 8px 0 28px; max-width: 782px; }
+.tape figcaption { margin: 12px 0 0; font-size: 15px; line-height: 1.4; }
+.compare { position: relative; aspect-ratio: 4 / 3; background: #000; overflow: hidden; touch-action: pan-y; user-select: none; cursor: ew-resize; border: 2px solid #6699CC; box-shadow: 6px 6px 0 #000; }
+.compare video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.compare .over { clip-path: inset(0 0 0 var(--split, 50%)); }
+.compare .divider { position: absolute; top: 0; bottom: 0; left: var(--split, 50%); width: 2px; margin-left: -1px; background: #FFFF66; box-shadow: 0 0 0 1px #000; }
+.compare .divider::after { content: ""; position: absolute; top: 50%; left: 50%; width: 28px; height: 28px; margin: -14px 0 0 -14px; background: #FFFF66; box-shadow: 3px 3px 0 #000; }
+.compare .tag { position: absolute; top: 12px; padding: 3px 9px; background: #000; color: #FFF; font: bold 14px/1.3 Arial, Helvetica, sans-serif; }
+.compare .tag.l { left: 12px; } .compare .tag.r { right: 12px; color: #FFFF66; }
+.compare .slide { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; -webkit-appearance: none; appearance: none; }
+.compare:focus-within .divider { box-shadow: 0 0 0 2px #FFFFFF; }
+.status { margin: 44px 0 0; max-width: 782px; box-sizing: border-box; padding: 12px 16px; background: #000; border-left: 4px solid #FFCC00; color: #FFF; }
+/* section names: the yellow tag of the CV */
+h2 { display: inline-block; margin: 36px 0 16px; padding: 4px 12px 3px; background: #FFCC00; color: #000033; font: 17px/1.25 "Arial Black", "Arial Bold", Arial, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; box-shadow: 3px 3px 0 #000; }
+/* the facts: the white box of the CV */
+.req { margin: 8px 0 28px; background: #FFF; color: #000; padding: 14px 16px 12px; font-size: 15px; line-height: 1.35; box-shadow: 6px 6px 0 #000; max-width: 30em; }
+.req table { width: 100%; border-collapse: collapse; }
+.req th, .req td { padding: 6px 6px 6px 0; text-align: left; vertical-align: top; border-bottom: 1px solid #CCC; }
+.req tbody th { font-weight: normal; }
+.req td { font-weight: bold; }
+
+@media (max-width: 860px) {
+  .head { grid-template-columns: minmax(0, 1fr); } .slab { margin: 0 auto; } h1 { font-size: 40px; }
+}
+@media (max-width: 600px) {
+  .page { padding: 18px 16px 40px; } .lead { font-size: 19px; } h1 { font-size: 34px; }
+  .req { padding: 12px 12px 10px; font-size: 14px; }
+  pre { font-size: 12px; }
+}
+</style>
 </head>
-<body>
-<header class="top wrap">
-<a class="mark" href="https://b0ris.net/">b<span class="zero">0</span>ris.net</a>
-<nav>
-<a href="https://b0ris.net/" data-nav="cv">CV</a>
-<a href="https://projects.b0ris.net/" data-nav="projects" aria-current="page">Projects</a>
-<a href="https://b0ris.net/boris-timofeenko-cv.pdf">CV as PDF</a>
-<a href="https://github.com/boris-timofeenko">GitHub</a>
+<body data-page="projects">
+<nav class="bar" aria-label="Disc">
+<a href="https://b0ris.net/projects/" data-back><kbd>Esc</kbd> Projects</a>
+<span class="gap"></span>
+<a href="https://b0ris.net/cv/" data-nav="cv">CV</a>
+<a href="https://b0ris.net/projects/" data-nav="projects">Projects</a>
+<a href="https://b0ris.net/contacts/" data-nav="contacts">Contacts</a>
 </nav>
-</header>
+<main class="page">
+<div class="head">
+<span class="slab" role="img" aria-label="The uvcdv-capture window, on a card"></span>
+<div><h1>uvcdv-capture</h1><p class="lead">Captures MiniDV tapes over USB on a Mac that has no FireWire. The .dv files come out bit for bit the same as a FireWire capture would give.</p>
+<p class="go"><a href="https://github.com/boris-timofeenko/uvcdv-capture#installation">Install &#9654;</a><a class="src" href="https://github.com/boris-timofeenko/uvcdv-capture">Source on GitHub</a></p></div>
+</div>
 
-<main class="wrap">
-<header class="head">
-<p class="kicker"><a href="https://projects.b0ris.net/">Projects</a> / uvcdv-capture</p>
-<h1>uvcdv-capture</h1>
-<p class="lede">MiniDV capture over USB on a modern Mac.</p>
-</header>
+<p>I have a box of MiniDV tapes and a Panasonic NV-GS330 camcorder. The proper way to capture MiniDV is FireWire, which modern Macs don&rsquo;t have and Apple removed from macOS. Analog capture digitizes the picture again and loses quality. Some Panasonic camcorders from the mid-2000s can send the same digital stream over plain USB, in a mode called Motion DV. Windows and Linux read it. On a Mac the camera shows up, but no capture device appears, because Apple&rsquo;s driver doesn&rsquo;t implement that format.</p>
+<p>uvcdv-capture reads the stream through libusb, with no drivers and no kernel extensions, and writes .dv files bit for bit as a FireWire capture would. It counts every lost packet; a clean capture shows <code>drop=0 ovf=0</code>, and dvrescue finds no damaged frames.</p>
 
-<figure class="feature dark">
+<figure class="tape">
 <div class="compare" data-compare>
 <video class="base" muted loop playsinline autoplay preload="auto" poster="../media/tape-poster.jpg"><source src="../media/tape-clean.av1.mp4?v=e94768a7" type='video/mp4; codecs="av01.0.04M.08"'><source src="../media/tape-clean.mp4?v=77ccc77c" type="video/mp4"></video>
 <video class="over" muted loop playsinline autoplay preload="auto" poster="../media/tape-vhs-poster.jpg"><source src="../media/tape-vhs.av1.mp4?v=fe075964" type='video/mp4; codecs="av01.0.04M.08"'><source src="../media/tape-vhs.mp4?v=b0e7c5b5" type="video/mp4"></video>
@@ -40,57 +97,56 @@
 <span class="tag l">as captured</span><span class="tag r">--vhs</span>
 <input type="range" min="0" max="100" value="50" aria-label="Move the divider between the captured clip and the VHS emulation" class="slide">
 </div>
-<figcaption>The same eight seconds of my tape: the National Assembly in Belgrade, then my dog. Left of the line, the clip as captured (re-encoded here for the web; the .dv file itself is bit for bit); right of it, the same frames through <code>--vhs</code>, which simulates the signal path from the camcorder to a capture card. Drag the line.</figcaption>
+<figcaption>Eight seconds of my tape: the National Assembly in Belgrade, then my dog. Left of the line, the clip as captured (re-encoded here for the web; the .dv file itself is bit for bit); right of it, the same frames through <code>--vhs</code>. Drag the line.</figcaption>
 </figure>
 
-<div class="cols">
-<dl class="facts">
-<dt>Version</dt><dd>1.12.1, 12 October 2026</dd>
-<dt>Runs on</dt><dd>macOS on Apple Silicon. Intel should work but is untested. The command line tool also builds on Linux.</dd>
-<dt>Written in</dt><dd>C on libusb (command line), Swift and AppKit (the app)</dd>
-<dt>License</dt><dd>GPL-3.0</dd>
-<dt>Source</dt><dd><a href="https://github.com/boris-timofeenko/uvcdv-capture">GitHub</a>, 12 stars</dd>
-</dl>
-<div class="prose">
-<pre><code>brew tap boris-timofeenko/tap &amp;&amp; brew trust boris-timofeenko/tap &amp;&amp; brew install uvcdv-capture</code></pre>
-<p>I have a box of MiniDV tapes and a Panasonic NV-GS330 camcorder. The proper way to capture MiniDV is FireWire, which modern Macs don&rsquo;t have and Apple removed from macOS. Analog capture digitizes the picture again and loses quality. Some Panasonic camcorders from the mid-2000s can send the same digital stream over plain USB, in a mode called Motion DV. Windows and Linux read it. On a Mac the camera shows up, but no capture device appears, because Apple&rsquo;s driver doesn&rsquo;t implement that format.</p>
-<p>uvcdv-capture reads the stream through libusb, with no drivers and no kernel extensions, and writes .dv files bit for bit as a FireWire capture would. It counts every lost packet; a clean capture shows <code>drop=0 ovf=0</code>, and dvrescue finds no damaged frames.</p>
-<p>It&rsquo;s for people with such a camcorder and a box of tapes. I have tested it only on my NV-GS330. If your camera has a DV-over-USB mode, the <a href="https://github.com/boris-timofeenko/uvcdv-capture#trying-an-untested-camera">README</a> explains how to check it in a minute.</p>
-<p>Claude Code wrote the code; most features came from digitizing my own tapes. I asked the agent: &ldquo;In Scenalyzer on a PC I could start and stop tape playback on this same camera, maybe we can do that here too?&rdquo; Now the Mac does that over USB. I filmed a concert in the dark; the first night mode made it brighter but noisy, and the picture kept changing. The one that stayed applies one fixed shadow curve per scene. There is also a VHS emulation, <code>--vhs</code>, that simulates the signal path from the camcorder to the capture card.</p>
+<h2>What it does</h2>
+<ul class="feat">
+<li>Captures to raw .dv, the archival master every DV tool understands, with the sound, the timecode and the recording dates inside.</li>
+<li>Controls the tape over the same USB cable: play, pause, stop, rewind, fast-forward, and reads the timecode without capturing. In Scenalyzer on a PC I could start and stop the tape on this same camera, so I asked for it here too.</li>
+<li>Digitizes a whole tape hands-free: starts playback, captures until the recording ends and stops the tape.</li>
+<li>Splits the capture into one file per recorded clip, by the jumps in timecode and recording date.</li>
+<li>Encodes MP4 on the fly, 6 to 8 times smaller than raw DV, with optional deinterlacing or a 720p 50&nbsp;fps version ready for YouTube. For editing there is ProRes 422 HQ instead.</li>
+<li>Replaces the camera&rsquo;s sound with a separate recorder&rsquo;s, found and synced for every scene.</li>
+<li>Adjusts the picture with sliders that work live, even mid-capture, and corrects each scene automatically. I filmed a concert in the dark; the first night mode made it brighter but noisy, and the picture kept changing. The one that stayed applies one fixed shadow curve per scene.</li>
+<li>Turns DV into a worn VHS capture with <code>--vhs</code>, by simulating the signal path from the camcorder through the tape and the cable to a capture card, not with a retro filter.</li>
+<li>Does all of this from the command line or in a native Mac app, in English or Russian.</li>
+</ul>
+<figure class="shot"><a href="../img/uvcdv-gui-vhs-assembly.jpg?v=22b62655"><img src="../img/uvcdv-gui-vhs-assembly-t.jpg?v=2c406389" alt="The app processing the clip from my tape with VHS emulation on. &ldquo;Stream clean, no data loss&rdquo; is the packet counter." loading="lazy"></a><figcaption>The app processing the clip from my tape with VHS emulation on. &ldquo;Stream clean, no data loss&rdquo; is the packet counter. <span class="meta">1600×1261, 230 KB</span></figcaption></figure>
 
 <h2>The one command most people need</h2>
 <pre><code>uvcdv-capture --play --stop --idle 15 tape01.dv</code></pre>
-<p>It starts the tape, captures until the recording ends and stops the tape. One hour of tape is about 13 GB as raw DV, or about 1.7 GB with <code>tape01.mp4</code> as the output.</p>
+<p>It starts the tape, captures until the recording ends and stops the tape. One hour of tape is about 13&nbsp;GB as raw DV, or about 1.7&nbsp;GB with <code>tape01.mp4</code> as the output.</p>
 
-<h2>Requirements</h2>
-<ul>
-<li>A Panasonic MiniDV camcorder with USB FUNCTION set to Motion DV (NV-GS and PV-GS series), on the AC adapter.</li>
-<li>macOS on Apple Silicon.</li>
-<li>ffmpeg for MP4 encoding and preview: <code>brew install ffmpeg</code>.</li>
+<h2>What you need</h2>
+<ul class="feat">
+<li>A Panasonic MiniDV camcorder with USB FUNCTION set to Motion DV (the NV-GS and PV-GS series), on the AC adapter.</li>
+<li>A Mac with Apple Silicon. On Intel it should work through Homebrew, but nobody has tried yet.</li>
+<li>ffmpeg for MP4 and the preview: <code>brew install ffmpeg</code>.</li>
+</ul>
+<pre><code>brew tap boris-timofeenko/tap &amp;&amp; brew trust boris-timofeenko/tap &amp;&amp; brew install uvcdv-capture</code></pre>
+
+<h2>What it can&rsquo;t do</h2>
+<ul class="feat">
+<li>Sony &ldquo;USB Streaming&rdquo;, JVC and Canon camcorders don&rsquo;t send DV over USB at all, so it can&rsquo;t capture from them.</li>
+<li>I have tested it end to end only on my NV-GS330. If your camera has a DV-over-USB mode, the <a href="https://github.com/boris-timofeenko/uvcdv-capture#trying-an-untested-camera">README</a> explains how to check it in a minute.</li>
+<li>The prebuilt binaries are not code-signed, so macOS asks before the first launch; Homebrew builds from source and doesn&rsquo;t.</li>
 </ul>
 
-<h2>Known limits</h2>
-<ul>
-<li>Sony &ldquo;USB Streaming&rdquo; and JVC or Canon camcorders don&rsquo;t send DV over USB.</li>
-<li>Tested end to end only on the NV-GS330.</li>
-<li>The prebuilt binaries are not code-signed; Homebrew builds from source.</li>
-</ul>
-</div>
+<div class="req">
+<table>
+<tbody>
+<tr><th scope="row">Version</th><td>1.12.1, 12 October 2026</td></tr>
+<tr><th scope="row">Command line</th><td>C on libusb</td></tr>
+<tr><th scope="row">App</th><td>Swift and AppKit</td></tr>
+<tr><th scope="row">License</th><td>GPL-3.0</td></tr>
+</tbody>
+</table>
 </div>
 
-<div class="block">
-<h2>Screenshot</h2>
-<div class="body gallery">
-<figure class="shot wide"><a href="../img/uvcdv-gui-vhs-assembly.jpg?v=22b62655"><img src="../img/uvcdv-gui-vhs-assembly-t.jpg?v=9a90a64c" alt="The app processing the clip from my tape with VHS emulation on. &ldquo;Stream clean, no data loss&rdquo; is the packet counter." loading="lazy"></a><figcaption>The app processing the clip from my tape with VHS emulation on. &ldquo;Stream clean, no data loss&rdquo; is the packet counter. <span class="meta">1600×1261, 230 KB</span></figcaption></figure>
-</div>
-</div>
+<p class="status">Claude Code wrote the code from my tasks; most features came from digitizing my own tapes. It&rsquo;s for people with such a camcorder and a box of tapes. uvcdv-capture is free and open source on <a href="https://github.com/boris-timofeenko/uvcdv-capture">GitHub</a>.</p>
 </main>
-<footer class="wrap">
-<p>Boris Timofeenko, <a href="mailto:timofeenkoboris@gmail.com">timofeenkoboris@gmail.com</a>. The 0 in b0ris is a zero.</p>
-<p>No cookies, no analytics. Updated 13 November 2026.</p>
-</footer>
-<script src="../charts.js?v=4340d822" defer></script>
-
-<script src="../compare.js?v=661e207e" defer></script>
+<script src="../compare.js?v=661e207e"></script>
+<script src="../v/disc/disc.js?v=6a7d03bd"></script>
 </body>
 </html>
