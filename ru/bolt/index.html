@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Bolt: b0ris.net</title>
+<meta name="description" content="Bolt, вероятно, самый быстрый просмотрщик фото для macOS: замеры в сравнении с «Просмотром», Quick Look, XnView MP и ApolloOne.">
+<link rel="icon" href="../../favicon.svg?v=b2645dfd" type="image/svg+xml">
+<link rel="stylesheet" href="../../v/disc/disc.css?v=6da0a4ae">
+<style>
+/* A project opened from the menu, the way a game pauses: the room of the projects menu behind, dimmed; Bolt's 3D card
+   from the list of all projects turning slowly. The text is the article about Bolt; its charts are the riso prints
+   made for it, its tables sit in the white box of the CV, and what Bolt does is yellow in both. */
+html { background: #000022; -webkit-text-size-adjust: 100%; }
+body { margin: 0; min-height: 100vh; color: #CCEEFF; font: 17px/1.5 Arial, Helvetica, sans-serif;
+  background: linear-gradient(rgba(0,0,30,0.8), rgba(0,0,30,0.8)), #000022 url(../../v/proto/menu-room.jpg?v=ae94d8cd) center / cover fixed; }
+a { color: #99CCFF; } a:hover { color: #FFFF66; }
+.page { max-width: 1040px; margin: 0 auto; padding: 30px 20px 56px; }
+.head { display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 10px 32px; align-items: center; margin: 0 0 26px; }
+.slab { display: block; width: 400px; max-width: 100%; aspect-ratio: 400 / 275; background: url(../../v/disc/card-bolt.webp?v=8e894f54) 0 0 / 800% 100% no-repeat; animation: turn 2.4s steps(8, jump-none) infinite alternate; }
+@keyframes turn { from { background-position-x: 0%; } to { background-position-x: 100%; } }
+h1 { margin: 0 0 8px; font: 52px/1 "Arial Black", "Arial Bold", Arial, sans-serif; color: #FFF; text-shadow: 3px 3px 0 #000; }
+.lead { margin: 0; font-size: 21px; line-height: 1.4; color: #FFFF66; font-weight: bold; }
+.go { margin: 16px 0 0; }
+.go a { display: inline-block; margin: 0 14px 6px 0; padding: 5px 14px; color: #000033; background: #FFFF66; font: 17px "Arial Rounded MT Bold", "Arial Black", Arial, sans-serif; text-decoration: none; box-shadow: 3px 3px 0 #000; }
+.go a:hover { background: #FFFFFF; color: #000033; }
+.go a.src { padding: 5px 0; color: #99CCFF; background: none; box-shadow: none; font: inherit; text-decoration: underline; }
+.go a.src:hover { color: #FFFF66; }
+/* the article runs in one column; the screenshots of the app and the code take the full width */
+.page > p, .page > .feat, .page > .req, .page > .fig { max-width: 782px; box-sizing: border-box; }
+.page > p { margin: 0 0 1.2em; }
+.page kbd { font: inherit; font-size: 0.9em; color: #000033; background: #CCEEFF; border-radius: 3px; padding: 0 5px; }
+code { font: 0.9em Menlo, Monaco, monospace; color: #FFFF99; }
+pre { margin: 0 0 1.4em; padding: 12px 14px; background: #000; border-left: 4px solid #6699CC; color: #CCEEFF; font: 14px/1.45 Menlo, Monaco, monospace; overflow-x: auto; }
+pre code { font: inherit; color: inherit; }
+pre .c { color: #6699CC; }
+/* lists: the stars of the back of the box, as on the CV */
+.feat { list-style: none; margin: 0 0 1.4em; padding: 0; }
+.feat li { position: relative; padding-left: 26px; margin: 0 0 10px; }
+.feat li::before { content: "\2605"; position: absolute; left: 0; top: 0; color: #FFCC00; }
+figure.shot { margin: 8px 0 28px; color: #CCEEFF; font-size: 15px; line-height: 1.4; }
+figure.shot .meta { display: none; }
+figure.shot img { display: block; width: 100%; height: auto; border: 2px solid #6699CC; box-shadow: 6px 6px 0 #000; margin: 0 0 10px; box-sizing: border-box; }
+/* the article's charts, printed on cream */
+.fig { margin: 8px 0 28px; }
+.fig .pan { box-shadow: 6px 6px 0 #000; }
+.fig .pan + .pan { margin-top: 18px; }
+.fig img { display: block; width: 100%; height: auto; }
+.fig figcaption { margin: 12px 0 0; font-size: 15px; line-height: 1.4; }
+.status { margin: 44px 0 0; padding: 12px 16px; background: #000; border-left: 4px solid #FFCC00; color: #FFF; }
+/* section names: the yellow tag of the CV */
+h2 { display: inline-block; margin: 36px 0 16px; padding: 4px 12px 3px; background: #FFCC00; color: #000033; font: 17px/1.25 "Arial Black", "Arial Bold", Arial, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; box-shadow: 3px 3px 0 #000; }
+/* tables: the white box of the CV; Bolt's column and Bolt's choices in the yellow of the charts */
+.req { margin: 8px 0 28px; background: #FFF; color: #000; padding: 14px 16px 12px; font-size: 15px; line-height: 1.35; box-shadow: 6px 6px 0 #000; box-sizing: border-box; }
+.req.narrow { max-width: 30em; }
+.req .scroll { overflow-x: auto; }
+.req table { width: 100%; border-collapse: collapse; }
+.req th, .req td { padding: 6px 6px 6px 0; text-align: left; vertical-align: top; border-bottom: 1px solid #CCC; }
+.req thead th { font-size: 13px; border-bottom: 2px solid #000; }
+.req tbody th { font-weight: normal; }
+.req .n { text-align: right; padding-left: 10px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.req .bolt { background: #FFFF99; font-weight: bold; padding-left: 8px; padding-right: 8px; }
+.req p { margin: 0 0 8px; font-size: 13px; color: #333; }
+.req table + p, .req .scroll + .notes { margin-top: 10px; }
+.req .notes { margin: 10px 0 0; padding-left: 1.4em; font-size: 13px; line-height: 1.4; color: #333; }
+.req .notes li { margin: 0 0 4px; }
+
+@media (max-width: 860px) {
+  .head { grid-template-columns: minmax(0, 1fr); } .slab { margin: 0 auto; } h1 { font-size: 40px; }
+}
+@media (max-width: 600px) {
+  .page { padding: 18px 16px 40px; } .lead { font-size: 19px; }
+  .req { padding: 12px 12px 10px; font-size: 14px; }
+  .req table.cmp { min-width: 560px; }  /* five apps side by side; the table scrolls sideways inside its box */
+  .fig .pan { overflow-x: auto; } .fig img { min-width: 600px; }  /* the charts' labels stay readable; they scroll sideways */
+  pre { font-size: 12px; }
+}
+</style>
+</head>
+<body data-page="projects">
+<body data-page="projects">
+<nav class="bar" aria-label="Диск">
+<a href="https://b0ris.net/ru/projects/" data-back><kbd>Esc</kbd> Проекты</a>
+<span class="gap"></span>
+<a href="https://b0ris.net/ru/cv/" data-nav="cv">Резюме</a>
+<a href="https://b0ris.net/ru/projects/" data-nav="projects">Проекты</a>
+<a href="https://b0ris.net/ru/contacts/" data-nav="contacts">Контакты</a>
+<a href="../../bolt/" hreflang="en" lang="en">English</a>
+</nav>
+<main class="page">
+<div class="head">
+<span class="slab" role="img" aria-label="Bolt показывает одну из моих фотографий, на карточке"></span>
+<div><h1>Bolt</h1><p class="lead">Вероятно, самый быстрый просмотрщик фото для macOS. В моих замерах Bolt листает быстрее «Просмотра», Quick Look, XnView MP и ApolloOne. Ближайший из них, ApolloOne, показывает следующее фото в два с лишним раза медленнее.</p>
+<p class="go"><a href="https://github.com/boris-timofeenko/bolt/releases/latest">Скачать для Mac &#9654;</a><a class="src" href="https://github.com/boris-timofeenko/bolt">Исходники на GitHub</a></p></div>
+</div>
+
+<p>Я импортировал со своего айфона большую пачку фотографий в HEIC. Оказалось, что даже на современном макбуке листать их нечем. Встроенный «Просмотр» и сторонние программы показывали следующее фото с задержкой. Сами программы тоже открывались не сразу: между двойным кликом в Finder и фотографией на экране проходило заметное время. В прошлые годы я бы немного поплевался, посетовал на разучившихся писать быстрый код девелоперов и смирился бы, ведь раньше ради таких задержек никто бы не стал заморачиваться и писать свой просмотрщик. Но мы же живём в новой эпохе!</p>
+<p>Три вечера, новая модель Fable 5.2 с саб-агентами на Opus 5.5, и вот смотрите, получился Bolt, нативный просмотрщик на Swift и AppKit без сторонних зависимостей.</p>
+<p>Оптимизация шла по двум параметрам. Первый — это холодный старт: время от двойного клика в Finder до фото на экране. Второй — переключение на следующее фото: время от нажатия стрелки до чёткого кадра. Важна именно задержка после одного нажатия, а не число фото в секунду при зажатой стрелке. Холодный старт занимает около 350&nbsp;мс. От нажатия стрелки до фото на экране проходит 41&nbsp;мс, и на сам Bolt из них приходится 1,2&nbsp;мс. Остальное время кадр идёт к экрану через macOS, и сократить этот путь не получилось.</p>
+
+<h2>Что это за программа</h2>
+<p>В части UX я вдохновлялся IrfanView, программой, знакомой многим по Windows. Она выходит с 1996 года, и на её сайте до сих пор написано: «Fast and compact (just 8&nbsp;MB)». Мне хотелось перенести на Mac похожий опыт: открыл одно фото, листаешь всю папку, и всё делается с клавиатуры минимальным количеством нажатий.</p>
+<p>Программа получилась очень простая. <kbd>Delete</kbd> отправляет фото в Корзину и сразу показывает следующее. Диалога подтверждения нет, зато любое действие с файлом отменяется через <kbd>&#8984;Z</kbd>. Цифры от <kbd>1</kbd> до <kbd>9</kbd> перемещают фото в назначенные папки. Квадратные скобки <kbd>[</kbd> <kbd>]</kbd> поворачивают фото, при этом меняется только тег Orientation, а пиксели остаются байт в байт. Есть экспорт по пресету и пакетные операции: конвертация, изменение размера, переименование по шаблону. Ещё есть сетка, в которой видны все фото папки.</p>
+<figure class="shot"><a href="../../img/bolt-info.jpg?v=481d7771"><img src="../../img/bolt-info-t.jpg?v=a720ede2" alt="Фото и панель данных, клавиша I." loading="lazy"></a><figcaption>Фото и панель данных, клавиша <kbd>I</kbd>. <span class="meta">1600×915, 302 KB</span></figcaption></figure>
+<figure class="shot"><a href="../../img/bolt-grid.jpg?v=4ecd565f"><img src="../../img/bolt-grid-t.jpg?v=3d367709" alt="Сетка папки, клавиша G." loading="lazy"></a><figcaption>Сетка папки, клавиша <kbd>G</kbd>. <span class="meta">1600×915, 274 KB</span></figcaption></figure>
+<p>Bolt — это не инструмент для каталогизации. Он не заменяет Lightroom и другие программы, которые ведут библиотеку ваших фотоальбомов. Он работает на уровне папки, и его сила в простоте. Свои фото я раскладываю по папкам. Мне кажется, такой подход отказоустойчивее и ни от чего не зависит. Полноценный редактор Bolt тоже не заменяет.</p>
+<p>Теперь я пользуюсь им каждый день и поставил просмотрщиком по умолчанию.</p>
+
+<h2>Методика измерений</h2>
+<p>Чужую программу нельзя попросить сообщить, когда она показала кадр. Поэтому бенчмарк смотрит на экран. Он записывает экран через ScreenCaptureKit, сам нажимает клавиши и ищет в записи момент, когда появилось нужное фото.</p>
+<p>Фото: 202 штуки из моего архива с iPhone&nbsp;13. У 193 из них есть карта усиления (gain map): второе изображение внутри HEIC, которое говорит, где и насколько поднять яркость. На экране с запасом яркости такие фото показываются как HDR. Запас яркости — это то, во сколько раз экран может светить ярче обычного белого. У этого макбука он равен 2,0. Ниже будет видно, почему это важно.</p>
+<p>Узнавать фото в записи помогает эталон. В конце своего круга бенчмарк проходит в той же программе по всем показанным фото, ждёт на каждом 0,6&nbsp;секунды и запоминает установившуюся картинку. Кадр записи считается чётким, когда деталей на нём не меньше 0,9 от эталона, а яркость отличается не больше чем на 2 уровня из 255. Превью, встроенная в файл уменьшенная копия фото, этот порог не проходит: оно размытое.</p>
+<p>Программ пять: Bolt, ApolloOne 5.1 Trial, XnView MP 1.12.2, «Просмотр» 11 и Quick Look. ApolloOne платный, мерили его пробную версию. Окно у всех 1400&nbsp;×&nbsp;870. Каждую программу гоняли три круга в перемешанном порядке. Компьютер один: MacBook Air 15″ с Apple M5 и 16&nbsp;ГБ памяти, macOS 27, экран 60&nbsp;Гц.</p>
+<p>В таблицу ниже вошли пять сценариев. В трёх стрелку нажимают 90 раз: раз в секунду, раз в 400&nbsp;мс и раз в 150&nbsp;мс. В четвёртом стрелка зажата на три секунды. Первое повторение приходит через 500&nbsp;мс, дальше нажатия идут каждые 83&nbsp;мс, как при системном автоповторе. В пятом программа закрыта, и бенчмарк открывает в ней файл из Finder.</p>
+<figure class="fig">
+<div class="pan"><img src="chart-flip.png?v=1e35b330" width="1600" height="900" loading="lazy" alt="От стрелки до чёткого кадра, мс. Нажатие раз в секунду: Bolt 31, ApolloOne 87, XnView MP 116, «Просмотр» 140, Quick Look 172. Раз в 400 мс: 26, 64, 107, 123, 167. Раз в 150 мс: 27, 64, 229, 156, 197."></div>
+<div class="pan"><img src="chart-hold.png?v=0bb62d28" width="1600" height="760" loading="lazy" alt="Стрелка зажата на три секунды. Фото в секунду: Bolt 10,3, ApolloOne 6,2, XnView MP 2,7, «Просмотр» 6,7, большинство из них ещё не чёткие, Quick Look 0,3. После отпускания до чёткого кадра, мс: Bolt 0, ApolloOne 137, XnView MP 780, «Просмотр» 407."></div>
+<div class="pan"><img src="chart-open.png?v=748f7059" width="1600" height="760" loading="lazy" alt="Открытие из Finder до чёткого кадра, мс: Bolt 350, ApolloOne 2119, XnView MP 674, «Просмотр» 8250, Quick Look 637."></div>
+<figcaption>На графиках медианы. Те же цифры с 95-м перцентилем и сносками собраны в таблице ниже.</figcaption>
+</figure>
+<div class="req">
+<p>Все цифры в таблице — медиана, в скобках 95-й перцентиль, в миллисекундах.</p>
+<div class="scroll">
+<table class="cmp">
+<thead><tr><th></th><th class="n bolt">Bolt</th><th class="n">ApolloOne&#8311;</th><th class="n">XnView MP</th><th class="n">«Просмотр»</th><th class="n">Quick Look</th></tr></thead>
+<tbody>
+<tr><th scope="row">Нажатие раз в 1000&nbsp;мс</th><td class="n bolt">31 (49)</td><td class="n">87 (123)</td><td class="n">116 (134)</td><td class="n">140 (166)</td><td class="n">172 (224)</td></tr>
+<tr><th scope="row">Раз в 400&nbsp;мс</th><td class="n bolt">26 (36)</td><td class="n">64 (84)</td><td class="n">107 (131)</td><td class="n">123 (145)</td><td class="n">167 (247)</td></tr>
+<tr><th scope="row">Раз в 150&nbsp;мс</th><td class="n bolt">27 (35)</td><td class="n">64 (85)</td><td class="n">229 (486)&sup1;</td><td class="n">156 (247)&sup1;</td><td class="n">197 (238)&sup1;</td></tr>
+<tr><th scope="row">Зажатая стрелка, фото в секунду</th><td class="n bolt">10,3</td><td class="n">6,2</td><td class="n">2,7</td><td class="n">6,7</td><td class="n">0,3&sup2;</td></tr>
+<tr><th scope="row">Сколько из них чётких</th><td class="n bolt">100%</td><td class="n">100%</td><td class="n">100%</td><td class="n">6%</td><td class="n">&ndash;&sup2;</td></tr>
+<tr><th scope="row">После отпускания до чёткого кадра</th><td class="n bolt">0</td><td class="n">137</td><td class="n">780</td><td class="n">407</td><td class="n">&ndash;&sup2;</td></tr>
+<tr><th scope="row">Открытие из Finder, фото появилось</th><td class="n bolt">291 (872)</td><td class="n">2119 (3326)&sup3;</td><td class="n">674 (1140)</td><td class="n">2300 (7765)&#8308;</td><td class="n">237 (649)&#8309;</td></tr>
+<tr><th scope="row">Открытие из Finder, чёткий кадр</th><td class="n bolt">350 (1938)&#8310;</td><td class="n">2119 (3623)&sup3;</td><td class="n">674 (1140)</td><td class="n">8250 (13457)&#8308;</td><td class="n">637 (1016)&#8309;</td></tr>
+</tbody>
+</table>
+</div>
+<ol class="notes">
+<li>Эти программы не успевают. У XnView MP на 59 нажатиях из 90 картинка не сменилась до следующего нажатия. У «Просмотра» на 50 нажатиях из 90 фото не стало чётким. Quick Look на 29 нажатиях из 90 не показал фото.</li>
+<li>При синтетическом автоповторе Quick Look остался на одном фото, хотя выделение в Finder двигалось. На живой клавиатуре это не проверено, вывода здесь нет.</li>
+<li>Вместе с запуском программы и проверкой пробной версии.</li>
+<li>«Просмотр» листает только файлы, открытые вместе, поэтому ему открывали все 202 сразу. В его время входит загрузка всех файлов, и с остальными оно напрямую не сравнимо.</li>
+<li>Quick Look открывали пробелом в уже открытом окне Finder. Программу он не запускает.</li>
+<li>В двух открытиях после паузы HDR-фото около секунды набирало яркость, и бенчмарк ждал итоговой. Сейчас кадр сразу показывается с итоговой яркостью. Экранную серию после этого не повторяли.</li>
+<li>Листание и зажатая стрелка у ApolloOne посчитаны по двум кругам из трёх. В первом у него была открыта лента миниатюр, и 57 нажатий из 90 не сменили фото.</li>
+</ol>
+</div>
+<p>При листании Bolt быстрее всех, кого мы мерили. Его 95-й перцентиль ниже медианы любой из четырёх других программ. При открытии из Finder он не первый. Фото раньше появляется у Quick Look, через 237&nbsp;мс против 291&nbsp;мс. И в худших случаях чёткий кадр при открытии приходит у него позже, чем у Quick Look и XnView MP. Причина в сноске 6.</p>
+
+<h2>41 мс от нажатия до экрана: что из них зависит от Bolt</h2>
+<p>От нажатия стрелки до фото на экране проходит 41&nbsp;мс, а в таблице сравнения у Bolt стоит 31&nbsp;мс. Это разные часы. В таблице отсчёт идёт от синтетического нажатия до кадра в записи экрана. Но запись экрана, судя по калибровке, видит кадр раньше, чем его покажет панель. Смену цвета фона запись замечает через 21–33&nbsp;мс после команды, а по отметке системы кадр идёт до экрана 40&nbsp;мс. Поэтому таблица годится для сравнения программ, а абсолютное время даёт только замер изнутри приложения.</p>
+<p>Для такого замера агент встроил в Bolt зонд. Зонд посылает приложению событие клавиши, а вместе с фото, в той же транзакции Core Animation, кладёт в окно слой Metal размером 2&nbsp;пункта. Транзакция — это пакет изменений слоёв, который приложение отправляет в WindowServer за один раз. У слоя Metal можно спросить <code>presentedTime</code>, момент показа кадра, и это время назначает система, а не приложение. Замер шёл на фото, которые уже лежат в кэше.</p>
+<p>Первым делом зонд помог решить, что отправлять в одной транзакции с фото. Напрашивается всё сразу: фото, заголовок окна, значок файла в заголовке и строку состояния. Так выходит 54&nbsp;мс, и фото приходит на экран на кадр позже, чем могло бы, потому что AppKit раскладывает и рисует текст заголовка и строки состояния внутри той же транзакции. Агент убирал их по очереди и смотрел, как меняется время до экрана.</p>
+<div class="req narrow">
+<table>
+<thead><tr><th>Что убрано из транзакции с фото</th><th class="n">До экрана, медиана / p95, мс</th></tr></thead>
+<tbody>
+<tr><th scope="row">Ничего</th><td class="n">55,6 / 63,0</td></tr>
+<tr><th scope="row">Только заголовок окна</th><td class="n">46,1 / 53,8</td></tr>
+<tr><th scope="row">Только значок файла</th><td class="n">53,6 / 60,6</td></tr>
+<tr><th scope="row">Только строка состояния</th><td class="n">52,2 / 58,1</td></tr>
+<tr><th scope="row" class="bolt">Все три</th><td class="n bolt">42,7 / 49,3</td></tr>
+</tbody>
+</table>
+<p>Отдельная серия из 37 нажатий, поэтому числа на 1–2&nbsp;мс отличаются от итоговых.</p>
+</div>
+<p>Виноват в основном заголовок окна. Главному потоку его смена стоит около 1&nbsp;мс, но без него фото приходит на экран на 9,5&nbsp;мс раньше, а без всех трёх на 13&nbsp;мс, почти на целый кадр. Поэтому в Bolt фото уходит своей транзакцией и первым, а заголовок и строка состояния идут в следующей.</p>
+<pre><code>CATransaction.begin()
+CATransaction.setDisableActions(true)
+imageLayer.contents = newFrame.layerContents
+<span class="c">// ...</span>
+CATransaction.commit()
+<span class="c">// Фото уходит в WindowServer отдельной транзакцией.</span>
+<span class="c">// Заголовок и строка состояния идут следом, максимум на кадр позже.</span>
+if window?.isVisible == true { CATransaction.flush() }</code></pre>
+<p>С отдельной транзакцией от события клавиши до кадра на экране проходит 41,4&nbsp;мс, с общей 54,1&nbsp;мс, 95-й перцентиль 49,3&nbsp;мс против 61,6&nbsp;мс. Эти 41&nbsp;мс делятся на три части:</p>
+<ul class="feat">
+<li>1,2&nbsp;мс проходит от события клавиши до транзакции с фото. Это вся работа Bolt. С общей транзакцией эта часть занимает 6&nbsp;мс, потому что к ней добавляются раскладка и отрисовка заголовка и строки состояния.</li>
+<li>От 0 до 16,7&nbsp;мс, в среднем около 8&nbsp;мс, кадр ждёт срока, к которому WindowServer собирает следующий кадр экрана.</li>
+<li>Ещё 31–34&nbsp;мс проходит от этого срока до показа. При 60&nbsp;Гц это около двух кадров.</li>
+</ul>
+<figure class="fig">
+<div class="pan"><img src="41ms.png?v=79813a67" width="1600" height="900" loading="lazy" alt="41 мс от нажатия стрелки до фото на экране: 1,2 мс из них работа Bolt, около 8 мс ожидание срока и около 32 мс WindowServer и экран. Если всё в одной транзакции, то 54 мс."></div>
+<figcaption>Время от события клавиши в приложении до момента, когда система показала кадр. Медиана по 111 нажатиям на HDR-фото, экран 60&nbsp;Гц. Жёлтое — работа Bolt, синее в точку — ожидание срока, сплошное синее — путь кадра через WindowServer до экрана.</figcaption>
+</figure>
+<p>За пределами 41&nbsp;мс остаются путь от клавиатуры до приложения и развёртка кадра панелью. По оценке агента это 1–5&nbsp;мс и около 8&nbsp;мс плюс отклик панели, но их не мерили.</p>
+<p>Получается, из 41&nbsp;мс приложение управляет только 1,2&nbsp;мс. Агент проверил, можно ли сократить остальное. Показ фото через Metal вместо <code>contents</code> дал 43,4&nbsp;мс против 41,4&nbsp;мс. Соседние кадры, заранее положенные в дерево слоёв, сократили транзакцию на 0,7&nbsp;мс, но на экране ничего не изменили. Вывод отчёта такой: в окне этот путь не обойти ни через <code>contents</code>, ни через Metal.</p>
+<p>Значит, Bolt может только держать следующее фото готовым кадром в кэше к моменту нажатия. Это задача декодера.</p>
+
+<h2>Декодер: от 151 мс до 17 мс</h2>
+<p>Чтобы следующее фото появлялось сразу, оно должно быть декодировано заранее, и чем быстрее декодируется одно фото, тем проще держать готовыми соседние. Время декодирования одного фото с айфона удалось сократить со 151&nbsp;мс до 17&nbsp;мс. Для этого пришлось сменить один системный фреймворк на другой: ImageIO на Core Image.</p>
+<p>Начинать естественно с ImageIO. Это стандартный способ прочитать картинку на Mac: программа даёт ему файл и получает готовый растр. Он понимает все привычные форматы, включая HEIC. На фото с айфона ImageIO оказался медленным. Без HDR он декодирует фото за 45–47&nbsp;мс, однако у айфонных фото есть карта усиления, и на экране с запасом яркости ImageIO декодирует их как HDR. На это уходит уже 140–151&nbsp;мс. Потоки не спасают: больше 11 фото в секунду он не выдаёт, сколько потоков ему ни дай.</p>
+<p>Куда уходит время, показал профиль. Сам HEVC декодируется аппаратно, а время теряется вокруг него. Фото с айфона на 12&nbsp;Мп состоит из 48 плиток размером 512&nbsp;×&nbsp;512. Для каждой плитки системный фреймворк CMPhoto заново создаёт сессию преобразования пикселей, <code>VTPixelTransferSession</code>, и каждый раз спрашивает WindowServer про основной экран. Микротест это подтвердил: 48 плиток с новой сессией на каждую занимают 23,4&nbsp;мс, а с одной общей сессией 11,0&nbsp;мс. На HDR-фото такой работы в профиле примерно в 2,6 раза больше.</p>
+<p>Core Image устроен иначе. Это другой системный фреймворк, он обрабатывает изображения на видеокарте: цвет, фильтры, масштабирование. Чаще его зовут ради фильтров, но читать файлы он тоже умеет. Судя по стекам, Core Image получает от CMPhoto всё фото целиком, а не по плиткам, и преобразует цвет и масштабирует за один проход на видеокарте.</p>
+<p>Bolt пользуется этим так. Он строит <code>CIImage</code> из файла, применяет карту усиления под запас яркости экрана и уменьшает фото до размера экрана. Результат рендерится в <code>IOSurface</code>, буфер, который слой показывает без копирования.</p>
+<pre><code>var image = CIImage(cgImageSource: source, index: 0, options: [.applyOrientationProperty: true])
+<span class="c">// ...</span>
+let gainMap = CIImage(cgImageSource: source, index: 0,
+                      options: [.applyOrientationProperty: true, .auxiliaryHDRGainMap: true])
+<span class="c">// ...</span>
+image = image.applyingGainMap(gainMap, headroom: Float(headroom))
+<span class="c">// ... масштаб под экран, затем рендер в IOSurface</span>
+try context.startTask(toRender: image, to: destination).waitUntilCompleted()</code></pre>
+<p>Так одно фото декодируется за 16–17&nbsp;мс вместе с HDR, и потоки начинают помогать. В таблице число HDR-фото в секунду у обоих фреймворков при разном числе потоков.</p>
+<div class="req">
+<div class="scroll">
+<table>
+<thead><tr><th>Потоков</th><th class="n">1</th><th class="n">2</th><th class="n">4</th><th class="n">6</th><th class="n">8</th></tr></thead>
+<tbody>
+<tr><th scope="row">ImageIO, HDR, фото в секунду</th><td class="n">6</td><td class="n">10</td><td class="n">11</td><td class="n">7</td><td class="n">11</td></tr>
+<tr><th scope="row" class="bolt">Core Image, HDR, фото в секунду</th><td class="n bolt">59</td><td class="n bolt">88</td><td class="n bolt">112</td><td class="n bolt">117</td><td class="n bolt">118</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>ImageIO упирается в 11 фото в секунду, а Core Image доходит до 118. В минутном прогоне на четырёх потоках он держит 110 фото в секунду. Результат агент сверил с ImageIO на 400 фото: размер и ориентация совпали на всех.</p>
+<p>ImageIO в Bolt при этом отвечает за PNG, GIF, TIFF, RAW, анимации и полный кадр при зуме. К нему же Bolt возвращается, когда Core Image не справился: это CMYK, оттенки серого и HDR без карты усиления.</p>
+<p>Ещё один вариант агент проверил и отложил: свой декодер на VideoToolbox. Прототип показал потолок железа в 147 фото в секунду, и это только декодирование плиток, без сборки и масштабирования. Core Image без HDR даёт 131, так что выигрыш был бы не больше 12%, и строить такой декодер не стоило.</p>
+<p>С таким декодером по-другому устроено и листание.</p>
+
+<h2>Листание: чёткий кадр на каждом шаге</h2>
+<p>Когда кадр готов заранее, Bolt по нажатию стрелки только сдвигает индекс в списке, берёт из кэша кадр этого фото и кладёт его в <code>contents</code> слоя. Отрисовки в приложении нет: показ кадра — это одна замена содержимого слоя с выключенной анимацией.</p>
+<p>Готовыми Bolt держит три фото вперёд по направлению движения и одно назад. Глубину «вперёд» подобрали замером при автоповторе каждые 16&nbsp;мс: с двумя фото вперёд чёткий кадр сразу был на 87–98% шагов, с тремя на 98–100%. С пятью он был на всех шагах, но память процесса вырастала ещё на 100&nbsp;МБ.</p>
+<p>Труднее всего зажатая стрелка. Самый дешёвый способ её пережить — показывать при удержании только превью, а чёткий кадр декодировать после отпускания. С ImageIO иначе и не выйдет: на HDR-фото он выдаёт максимум 11 фото в секунду, а автоповтор просит 12. С декодером на 17&nbsp;мс такой режим не нужен, и в Bolt его нет. Ниже оба подхода при разной частоте автоповтора.</p>
+<div class="req">
+<div class="scroll">
+<table>
+<thead><tr><th>Автоповтор каждые</th><th class="n">90&nbsp;мс</th><th class="n">60&nbsp;мс</th><th class="n">33&nbsp;мс</th><th class="n">16&nbsp;мс</th></tr></thead>
+<tbody>
+<tr><th scope="row">Шагов с чётким кадром сразу: ImageIO и режим превью</th><td class="n">99–100%</td><td class="n">4%</td><td class="n">4%</td><td class="n">4%</td></tr>
+<tr><th scope="row" class="bolt">Core Image без режима превью</th><td class="n bolt">100%</td><td class="n bolt">100%</td><td class="n bolt">100%</td><td class="n bolt">99–100%</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Автоповтор каждые 16&nbsp;мс — это 62 фото в секунду, и даже на нём Core Image без режима превью даёт чёткий кадр почти на каждом шаге. В режиме превью чёткий кадр появляется через 211–217&nbsp;мс после отпускания клавиши, по замеру внутри приложения, а без этого режима он уже на экране.</p>
+<p>Цену быстрого декодера Bolt платит памятью. HDR-кадр хранится в формате half float и занимает 29&nbsp;МБ для вертикального фото и 52&nbsp;МБ для горизонтального, а кадр из ImageIO занимает 14–26&nbsp;МБ. Освобождение большого кадра стоит главному потоку миллисекунды на каждом шаге, поэтому вытесненные кадры освобождает фоновая очередь. Кэш держит только запрошенное: текущее фото, одно назад и три вперёд. Максимум памяти процесса при листании получился 388&nbsp;МБ.</p>
+<p>Путь кадра через систему не сократить, зато свою работу можно сделать заранее. Так же устроен и запуск.</p>
+
+<h2>Холодный старт: работа, пока ждёт система</h2>
+<p>Холодный старт здесь означает двойной клик по фото в Finder, когда Bolt не запущен. В Bolt встроен таймлайн запуска, он записывает время каждого шага от старта процесса. По нему видно, что до окна большая часть времени занята системой. До <code>main</code> проходит 37&nbsp;мс, хотя сам бинарник при прямом запуске доходит до <code>main</code> примерно за 11&nbsp;мс, и ещё около 50&nbsp;мс занимает создание <code>NSApplication</code>. Как и путь кадра через WindowServer, это время Bolt сократить не может. Зато в это время он может работать на других ядрах. Приёмов три.</p>
+<ul class="feat">
+<li>Прогрев декодера. По замерам агента первый HEIC в жизни процесса декодируется примерно на 100&nbsp;мс дольше следующих. Поэтому в бандле лежит <code>warmup.heic</code> на 16&nbsp;×&nbsp;16 пикселей и 2324 байта, и Bolt отправляет его на декодирование в самом начале <code>main</code>, ещё до создания <code>NSApplication</code>.</li>
+<li>Декодирование до окна. Конструктор окна сначала ставит в очередь чтение превью и декодирование чёткого кадра и только после этого создаёт вьюхи.</li>
+<li>Порядок на главном потоке. Пустое окно встаёт на сохранённое место до вставки содержимого: так переезд стоит 7–8&nbsp;мс, а с содержимым 26&nbsp;мс. Меню собирается после показа фото, это ещё около 11&nbsp;мс.</li>
+</ul>
+<p>Прогрев в начале <code>main</code> выглядит так.</p>
+<pre><code>MainActor.assumeIsolated {
+    LaunchTimeline.mark("main")
+    LaunchWarmUp.start()                     <span class="c">// декодирует warmup.heic на другом ядре</span>
+    let application = NSApplication.shared   <span class="c">// около 50 мс системной работы</span>
+    <span class="c">// ...</span>
+}</code></pre>
+<p>На настоящих фото чёткий кадр по таймлайну готов через 176&nbsp;мс после старта процесса, по 12 запускам. В таблице сравнения стоят 350&nbsp;мс, и это снова разные часы, как с 31 и 41&nbsp;мс при листании: там отсчёт идёт от команды открыть файл и до кадра в записи экрана.</p>
+
+<h2>Вайб-кодинг и маленькие утилиты</h2>
+<p>Bolt закрывает маленькую нишу. Просмотрщик фото есть в каждой системе, сторонних хватает, и разница между ними — от десятков миллисекунд при листании до секунд при открытии. Раньше ради такой разницы никто бы не стал заморачиваться. Только в этой статье три идеи, которые не дали ничего или не окупились. Каждую надо было собрать, замерить и сравнить. Ещё понадобились бенчмарк, который меряет чужие программы по записи экрана, зонд внутри приложения, разбор чужих бандлов и профиль XnView MP.</p>
+<p>Агент при этом ошибался. Первый бенчмарк мерил синтетические фото без карты усиления и пропустил медленный путь HDR в ImageIO.</p>
+<p>С вайб-кодингом такие вещи делать можно. Особенно хорошо он работает на компактных утилитах. В Bolt около 10&nbsp;тысяч строк и нет зависимостей, раздутой кодовой базой Bolt не страдает.</p>
+<p>Мне кажется, незаполненных ниш такого размера ещё много.</p>
+
+<p class="status">Bolt 0.1 лежит на <a href="https://github.com/boris-timofeenko/bolt/releases/latest">GitHub</a> для macOS 14 и новее, бесплатный, с открытым кодом под GPLv3. Сборка подписана ad hoc и не нотаризована, поэтому macOS не откроет её с первого раза; как это обойти, написано в описании релиза.</p>
+</main>
+<script src="../../v/disc/disc.js?v=6a7d03bd"></script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>uvcdv-capture: b0ris.net</title>
+<meta name="description" content="uvcdv-capture снимает кассеты MiniDV по USB на Mac без FireWire, побитово, с управлением лентой, делением на сцены и нативным приложением.">
+<link rel="icon" href="../../favicon.svg?v=b2645dfd" type="image/svg+xml">
+<link rel="stylesheet" href="../../v/disc/disc.css?v=6da0a4ae">
+<style>
+/* A project opened from the menu, the way a game pauses: the room of the projects menu behind, dimmed; the project's 3D
+   card from the list of all projects turning slowly. Under the text, my own tape twice, as captured and through
+   --vhs, with a divider to drag; the app in a plain screenshot. */
+html { background: #000022; -webkit-text-size-adjust: 100%; }
+body { margin: 0; min-height: 100vh; color: #CCEEFF; font: 17px/1.5 Arial, Helvetica, sans-serif;
+  background: linear-gradient(rgba(0,0,30,0.8), rgba(0,0,30,0.8)), #000022 url(../../v/proto/menu-room.jpg?v=ae94d8cd) center / cover fixed; }
+a { color: #99CCFF; } a:hover { color: #FFFF66; }
+.page { max-width: 1040px; margin: 0 auto; padding: 30px 20px 56px; }
+.head { display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 10px 32px; align-items: center; margin: 0 0 26px; }
+.slab { display: block; width: 400px; max-width: 100%; aspect-ratio: 400 / 275; background: url(../../v/disc/card-uvcdv.webp?v=923b9edc) 0 0 / 800% 100% no-repeat; animation: turn 2.4s steps(8, jump-none) infinite alternate; }
+@keyframes turn { from { background-position-x: 0%; } to { background-position-x: 100%; } }
+h1 { margin: 0 0 8px; font: 52px/1 "Arial Black", "Arial Bold", Arial, sans-serif; color: #FFF; text-shadow: 3px 3px 0 #000; overflow-wrap: anywhere; }
+.lead { margin: 0; font-size: 21px; line-height: 1.4; color: #FFFF66; font-weight: bold; }
+.go { margin: 16px 0 0; }
+.go a { display: inline-block; margin: 0 14px 6px 0; padding: 5px 14px; color: #000033; background: #FFFF66; font: 17px "Arial Rounded MT Bold", "Arial Black", Arial, sans-serif; text-decoration: none; box-shadow: 3px 3px 0 #000; }
+.go a:hover { background: #FFFFFF; color: #000033; }
+.go a.src { padding: 5px 0; color: #99CCFF; background: none; box-shadow: none; font: inherit; text-decoration: underline; }
+.go a.src:hover { color: #FFFF66; }
+.page > p, .page > .feat, .page > .req, .page > pre { max-width: 782px; box-sizing: border-box; }
+.page > p { margin: 0 0 1.2em; }
+code { font: 0.9em Menlo, Monaco, monospace; color: #FFFF99; }
+pre { margin: 0 0 1.4em; padding: 12px 14px; background: #000; border-left: 4px solid #6699CC; color: #CCEEFF; font: 14px/1.45 Menlo, Monaco, monospace; overflow-x: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+pre code { font: inherit; color: inherit; }
+/* lists: the stars of the back of the box, as on the CV */
+.feat { list-style: none; margin: 0 0 1.4em; padding: 0; }
+.feat li { position: relative; padding-left: 26px; margin: 0 0 10px; }
+.feat li::before { content: "\2605"; position: absolute; left: 0; top: 0; color: #FFCC00; }
+figure.shot { margin: 8px 0 28px; color: #CCEEFF; font-size: 15px; line-height: 1.4; }
+figure.shot .meta { display: none; }
+figure.shot img { display: block; width: 100%; height: auto; border: 2px solid #6699CC; box-shadow: 6px 6px 0 #000; margin: 0 0 10px; box-sizing: border-box; }
+/* the tape, as captured and through --vhs: two videos playing in step, a divider to drag */
+.tape { margin: 8px 0 28px; max-width: 782px; }
+.tape figcaption { margin: 12px 0 0; font-size: 15px; line-height: 1.4; }
+.compare { position: relative; aspect-ratio: 4 / 3; background: #000; overflow: hidden; touch-action: pan-y; user-select: none; cursor: ew-resize; border: 2px solid #6699CC; box-shadow: 6px 6px 0 #000; }
+.compare video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.compare .over { clip-path: inset(0 0 0 var(--split, 50%)); }
+.compare .divider { position: absolute; top: 0; bottom: 0; left: var(--split, 50%); width: 2px; margin-left: -1px; background: #FFFF66; box-shadow: 0 0 0 1px #000; }
+.compare .divider::after { content: ""; position: absolute; top: 50%; left: 50%; width: 28px; height: 28px; margin: -14px 0 0 -14px; background: #FFFF66; box-shadow: 3px 3px 0 #000; }
+.compare .tag { position: absolute; top: 12px; padding: 3px 9px; background: #000; color: #FFF; font: bold 14px/1.3 Arial, Helvetica, sans-serif; }
+.compare .tag.l { left: 12px; } .compare .tag.r { right: 12px; color: #FFFF66; }
+.compare .slide { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; -webkit-appearance: none; appearance: none; }
+.compare:focus-within .divider { box-shadow: 0 0 0 2px #FFFFFF; }
+.status { margin: 44px 0 0; max-width: 782px; box-sizing: border-box; padding: 12px 16px; background: #000; border-left: 4px solid #FFCC00; color: #FFF; }
+/* section names: the yellow tag of the CV */
+h2 { display: inline-block; margin: 36px 0 16px; padding: 4px 12px 3px; background: #FFCC00; color: #000033; font: 17px/1.25 "Arial Black", "Arial Bold", Arial, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; box-shadow: 3px 3px 0 #000; }
+/* the facts: the white box of the CV */
+.req { margin: 8px 0 28px; background: #FFF; color: #000; padding: 14px 16px 12px; font-size: 15px; line-height: 1.35; box-shadow: 6px 6px 0 #000; max-width: 30em; }
+.req table { width: 100%; border-collapse: collapse; }
+.req th, .req td { padding: 6px 6px 6px 0; text-align: left; vertical-align: top; border-bottom: 1px solid #CCC; }
+.req tbody th { font-weight: normal; }
+.req td { font-weight: bold; }
+
+@media (max-width: 860px) {
+  .head { grid-template-columns: minmax(0, 1fr); } .slab { margin: 0 auto; } h1 { font-size: 40px; }
+}
+@media (max-width: 600px) {
+  .page { padding: 18px 16px 40px; } .lead { font-size: 19px; } h1 { font-size: 34px; }
+  .req { padding: 12px 12px 10px; font-size: 14px; }
+  pre { font-size: 12px; }
+}
+</style>
+</head>
+<body data-page="projects">
+<nav class="bar" aria-label="Диск">
+<a href="https://b0ris.net/ru/projects/" data-back><kbd>Esc</kbd> Проекты</a>
+<span class="gap"></span>
+<a href="https://b0ris.net/ru/cv/" data-nav="cv">Резюме</a>
+<a href="https://b0ris.net/ru/projects/" data-nav="projects">Проекты</a>
+<a href="https://b0ris.net/ru/contacts/" data-nav="contacts">Контакты</a>
+<a href="../../uvcdv-capture/" hreflang="en" lang="en">English</a>
+</nav>
+<main class="page">
+<div class="head">
+<span class="slab" role="img" aria-label="Окно uvcdv-capture на карточке"></span>
+<div><h1>uvcdv-capture</h1><p class="lead">Снимает кассеты MiniDV по USB на Mac без FireWire. Файлы .dv получаются побитово такими же, как при захвате через FireWire.</p>
+<p class="go"><a href="https://github.com/boris-timofeenko/uvcdv-capture#installation">Установка &#9654;</a><a class="src" href="https://github.com/boris-timofeenko/uvcdv-capture">Исходники на GitHub</a></p></div>
+</div>
+
+<p>У меня есть коробка кассет MiniDV и камера Panasonic NV-GS330. Правильный способ снимать MiniDV — FireWire, но его нет на современных Mac, а Apple убрала его из macOS. Аналоговый захват оцифровывает картинку заново и теряет качество. Некоторые камеры Panasonic середины 2000-х умеют отдавать тот же цифровой поток по обычному USB, в режиме Motion DV. Windows и Linux это читают. На Mac камера видна, но устройство захвата не появляется: драйвер Apple этот формат не поддерживает.</p>
+<p>uvcdv-capture читает поток через libusb, без драйверов и расширений ядра, и пишет файлы .dv побитово, как это делает захват по FireWire. Он считает каждый потерянный пакет: чистый захват показывает <code>drop=0 ovf=0</code>, а dvrescue не находит повреждённых кадров.</p>
+
+<figure class="tape">
+<div class="compare" data-compare>
+<video class="base" muted loop playsinline autoplay preload="auto" poster="../../media/tape-poster.jpg"><source src="../../media/tape-clean.av1.mp4?v=e94768a7" type='video/mp4; codecs="av01.0.04M.08"'><source src="../../media/tape-clean.mp4?v=77ccc77c" type="video/mp4"></video>
+<video class="over" muted loop playsinline autoplay preload="auto" poster="../../media/tape-vhs-poster.jpg"><source src="../../media/tape-vhs.av1.mp4?v=fe075964" type='video/mp4; codecs="av01.0.04M.08"'><source src="../../media/tape-vhs.mp4?v=b0e7c5b5" type="video/mp4"></video>
+<div class="divider" aria-hidden="true"></div>
+<span class="tag l">как захвачено</span><span class="tag r">--vhs</span>
+<input type="range" min="0" max="100" value="50" aria-label="Двигает разделитель между захваченным клипом и эмуляцией VHS" class="slide">
+</div>
+<figcaption>Восемь секунд моей кассеты: Народная скупщина в Белграде, потом моя собака. Слева от линии клип как захвачен (здесь перекодирован для веба, сам файл .dv побитово тот же); справа от неё те же кадры через <code>--vhs</code>. Потяните линию.</figcaption>
+</figure>
+
+<h2>Что умеет</h2>
+<ul class="feat">
+<li>Пишет сырой .dv — архивную копию, которую понимает любая программа для DV. Звук, таймкод и даты записи лежат внутри.</li>
+<li>Управляет лентой по тому же USB-кабелю: воспроизведение, пауза, стоп, перемотка назад и вперёд, и читает таймкод без записи. В Scenalyzer на ПК я мог запускать и останавливать ленту на этой же камере, поэтому попросил и здесь.</li>
+<li>Оцифровывает всю кассету сама: запускает воспроизведение, пишет, пока не кончится запись, и останавливает ленту.</li>
+<li>Делит запись на файлы: по одному на каждый клип, по скачкам таймкода и даты записи.</li>
+<li>Кодирует MP4 на лету, в 6–8 раз меньше сырого DV, с необязательным деинтерлейсом или версией 720p на 50&nbsp;кадров/с для YouTube. Для монтажа вместо этого есть ProRes 422 HQ.</li>
+<li>Заменяет звук камеры звуком отдельного диктофона: находит его и синхронизирует для каждой сцены.</li>
+<li>Регулирует картинку ползунками, которые работают сразу, даже во время захвата, и автоматически выравнивает каждую сцену. Я снимал концерт в темноте: первый ночной режим сделал картинку ярче, но шумной, и она всё время менялась. Тот, что остался, применяет одну фиксированную кривую теней на сцену.</li>
+<li>Превращает DV в потёртый захват VHS с помощью <code>--vhs</code>: моделирует путь сигнала от камеры через ленту и кабель до карты захвата, а не накладывает ретро-фильтр.</li>
+<li>Всё это работает из командной строки или в нативном приложении для Mac, на английском или на русском.</li>
+</ul>
+<figure class="shot"><a href="../../img/uvcdv-gui-vhs-assembly.jpg?v=22b62655"><img src="../../img/uvcdv-gui-vhs-assembly-t.jpg?v=2c406389" alt="Приложение обрабатывает клип с моей кассеты, с включённой эмуляцией VHS. «Stream clean, no data loss» — это счётчик пакетов." loading="lazy"></a><figcaption>Приложение обрабатывает клип с моей кассеты, с включённой эмуляцией VHS. «Stream clean, no data loss» — это счётчик пакетов. <span class="meta">1600×1261, 230 KB</span></figcaption></figure>
+
+<h2>Одна команда, которая нужна большинству</h2>
+<pre><code>uvcdv-capture --play --stop --idle 15 tape01.dv</code></pre>
+<p>Она запускает ленту, пишет, пока не кончится запись, и останавливает ленту. Час кассеты — примерно 13&nbsp;ГБ в сыром DV или около 1,7&nbsp;ГБ, если на выходе <code>tape01.mp4</code>.</p>
+
+<h2>Что понадобится</h2>
+<ul class="feat">
+<li>Камера Panasonic MiniDV с USB FUNCTION в режиме Motion DV (серии NV-GS и PV-GS), работающая от сетевого адаптера.</li>
+<li>Mac с Apple Silicon. На Intel должно работать через Homebrew, но пока никто не пробовал.</li>
+<li>ffmpeg для MP4 и предпросмотра: <code>brew install ffmpeg</code>.</li>
+</ul>
+<pre><code>brew tap boris-timofeenko/tap &amp;&amp; brew trust boris-timofeenko/tap &amp;&amp; brew install uvcdv-capture</code></pre>
+
+<h2>Чего не умеет</h2>
+<ul class="feat">
+<li>Камеры Sony с «USB Streaming», JVC и Canon вообще не отдают DV по USB, поэтому захватить с них нельзя.</li>
+<li>Я проверял от начала до конца только на своей NV-GS330. Если у вашей камеры есть режим DV по USB, в <a href="https://github.com/boris-timofeenko/uvcdv-capture#trying-an-untested-camera">README</a> написано, как это проверить за минуту.</li>
+<li>Готовые сборки не подписаны кодом, поэтому macOS спрашивает перед первым запуском. Homebrew собирает из исходников и не спрашивает.</li>
+</ul>
+
+<div class="req">
+<table>
+<tbody>
+<tr><th scope="row">Версия</th><td>1.12.1, 12 октября 2026</td></tr>
+<tr><th scope="row">Командная строка</th><td>C на libusb</td></tr>
+<tr><th scope="row">Приложение</th><td>Swift и AppKit</td></tr>
+<tr><th scope="row">Лицензия</th><td>GPL-3.0</td></tr>
+</tbody>
+</table>
+</div>
+
+<p class="status">Код написал Claude Code по моим задачам; большинство функций появилось, когда я оцифровывал свои кассеты. Программа для тех, у кого есть такая камера и коробка кассет. uvcdv-capture бесплатен и с открытым кодом, лежит на <a href="https://github.com/boris-timofeenko/uvcdv-capture">GitHub</a>.</p>
+</main>
+<script src="../../compare.js?v=661e207e"></script>
+<script src="../../v/disc/disc.js?v=6a7d03bd"></script>
+</body>
+</html>

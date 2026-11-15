@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>ne-slop-text: b0ris.net</title>
+<meta name="description" content="ne-slop-text — скилл для Claude Code. Пишет текст из твоих собственных материалов и правит только те предложения, которые написали бы и дефолтные модели. Проверен вслепую на самом авторе.">
+<link rel="icon" href="../../favicon.svg?v=b2645dfd" type="image/svg+xml">
+<link rel="stylesheet" href="../../v/disc/disc.css?v=6da0a4ae">
+<style>
+/* A project opened from the menu, the way a game pauses: the room of the projects menu behind, dimmed; the project's 3D
+   card from the list of all projects turning slowly. The texts compared side by side are printed on the white of the
+   CV's boxes, ne-slop-text's own in the yellow the Bolt page gives Bolt. */
+html { background: #000022; -webkit-text-size-adjust: 100%; }
+body { margin: 0; min-height: 100vh; color: #CCEEFF; font: 17px/1.5 Arial, Helvetica, sans-serif;
+  background: linear-gradient(rgba(0,0,30,0.8), rgba(0,0,30,0.8)), #000022 url(../../v/proto/menu-room.jpg?v=ae94d8cd) center / cover fixed; }
+a { color: #99CCFF; } a:hover { color: #FFFF66; }
+.page { max-width: 1040px; margin: 0 auto; padding: 30px 20px 56px; }
+.head { display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 10px 32px; align-items: center; margin: 0 0 26px; }
+.slab { display: block; width: 400px; max-width: 100%; aspect-ratio: 400 / 275; background: url(../../v/disc/card-neslop.webp?v=f66e1dba) 0 0 / 800% 100% no-repeat; animation: turn 2.4s steps(8, jump-none) infinite alternate; }
+@keyframes turn { from { background-position-x: 0%; } to { background-position-x: 100%; } }
+h1 { margin: 0 0 8px; font: 52px/1 "Arial Black", "Arial Bold", Arial, sans-serif; color: #FFF; text-shadow: 3px 3px 0 #000; overflow-wrap: anywhere; }
+.lead { margin: 0; font-size: 21px; line-height: 1.4; color: #FFFF66; font-weight: bold; }
+.go { margin: 16px 0 0; }
+.go a { display: inline-block; margin: 0 14px 6px 0; padding: 5px 14px; color: #000033; background: #FFFF66; font: 17px "Arial Rounded MT Bold", "Arial Black", Arial, sans-serif; text-decoration: none; box-shadow: 3px 3px 0 #000; }
+.go a:hover { background: #FFFFFF; color: #000033; }
+.go a.src { padding: 5px 0; color: #99CCFF; background: none; box-shadow: none; font: inherit; text-decoration: underline; }
+.go a.src:hover { color: #FFFF66; }
+.page > p, .page > .feat, .page > .req, .page > pre { max-width: 782px; box-sizing: border-box; }
+.page > p { margin: 0 0 1.2em; }
+code { font: 0.9em Menlo, Monaco, monospace; color: #FFFF99; }
+pre { margin: 0 0 1.4em; padding: 12px 14px; background: #000; border-left: 4px solid #6699CC; color: #CCEEFF; font: 14px/1.45 Menlo, Monaco, monospace; overflow-x: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+pre code { font: inherit; color: inherit; }
+/* lists: the stars of the back of the box, as on the CV */
+.feat { list-style: none; margin: 0 0 1.4em; padding: 0; }
+.feat li { position: relative; padding-left: 26px; margin: 0 0 10px; }
+.feat li::before { content: "\2605"; position: absolute; left: 0; top: 0; color: #FFCC00; }
+figure.shot { margin: 8px 0 28px; color: #CCEEFF; font-size: 15px; line-height: 1.4; }
+figure.shot .meta { display: none; }
+figure.shot img { display: block; width: 100%; height: auto; border: 2px solid #6699CC; box-shadow: 6px 6px 0 #000; margin: 0 0 10px; box-sizing: border-box; }
+/* one paragraph three ways, side by side */
+.ex { margin: 8px 0 28px; }
+.ex .three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: start; }
+.ex blockquote { margin: 0; padding: 12px 14px 14px; background: #FFF; color: #000; font-size: 15px; line-height: 1.45; box-shadow: 6px 6px 0 #000; }
+.ex blockquote.ours { background: #FFFF99; }
+.ex blockquote b { display: block; margin: 0 0 6px; font: 13px/1.2 "Arial Black", "Arial Bold", Arial, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; color: #000033; }
+.ex blockquote p { margin: 0; }
+.ex mark { background: #FFCCCC; color: inherit; padding: 0 1px; }
+.ex figcaption { margin: 14px 0 0; font-size: 15px; line-height: 1.4; max-width: 782px; }
+.status { margin: 44px 0 0; max-width: 782px; box-sizing: border-box; padding: 12px 16px; background: #000; border-left: 4px solid #FFCC00; color: #FFF; }
+/* section names: the yellow tag of the CV */
+h2 { display: inline-block; margin: 36px 0 16px; padding: 4px 12px 3px; background: #FFCC00; color: #000033; font: 17px/1.25 "Arial Black", "Arial Bold", Arial, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; box-shadow: 3px 3px 0 #000; }
+/* tables: the white box of the CV */
+.req { margin: 8px 0 28px; background: #FFF; color: #000; padding: 14px 16px 12px; font-size: 15px; line-height: 1.35; box-shadow: 6px 6px 0 #000; }
+.req.narrow { max-width: 30em; }
+.req table { width: 100%; border-collapse: collapse; }
+.req th, .req td { padding: 6px 6px 6px 0; text-align: left; vertical-align: top; border-bottom: 1px solid #CCC; }
+.req thead th { font-size: 13px; border-bottom: 2px solid #000; }
+.req tbody th { font-weight: normal; }
+.req .n { text-align: right; padding-left: 10px; white-space: nowrap; font-variant-numeric: tabular-nums; font-weight: bold; }
+.req p { margin: 10px 0 0; font-size: 13px; color: #333; }
+
+@media (max-width: 860px) {
+  .head { grid-template-columns: minmax(0, 1fr); } .slab { margin: 0 auto; } h1 { font-size: 40px; }
+  .ex .three { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 600px) {
+  .page { padding: 18px 16px 40px; } .lead { font-size: 19px; } h1 { font-size: 34px; }
+  .req { padding: 12px 12px 10px; font-size: 14px; }
+  pre { font-size: 12px; }
+}
+</style>
+</head>
+<body data-page="projects">
+<nav class="bar" aria-label="Disc">
+<a href="https://b0ris.net/ru/projects/" data-back><kbd>Esc</kbd> Проекты</a>
+<span class="gap"></span>
+<a href="https://b0ris.net/ru/cv/" data-nav="cv">Резюме</a>
+<a href="https://b0ris.net/ru/projects/" data-nav="projects">Проекты</a>
+<a href="https://b0ris.net/ru/contacts/" data-nav="contacts">Контакты</a>
+<a href="../../ne-slop-text/" hreflang="en" lang="en">English</a>
+</nav>
+<main class="page">
+<div class="head">
+<span class="slab" role="img" aria-label="Слепой тест ne-slop-text на карточке"></span>
+<div><h1>ne-slop-text</h1><p class="lead">Скилл для Claude Code. Пишет текст из твоего материала, а потом правит только те предложения, которые написали бы и три дефолтные модели.</p>
+<p class="go"><a href="https://github.com/boris-timofeenko/ne-slop-text#install">Установить &#9654;</a><a class="src" href="https://github.com/boris-timofeenko/ne-slop-text">Исходники на GitHub</a></p></div>
+</div>
+
+<p>Я делал квест «Белград 2026», и его графика вышла живой: фотки с телефона, которые испортил скрипт, персонажи, нарисованные кодом, и герой, вырезанный из фото друга, с белой каймой волшебного ластика, которую не убрали. Так появился мой скилл ne-slop для творческой работы. Для текста этого мало. А текст, прогнанный через популярный humanizer, я узнаю за версту.</p>
+<p>Humanizer и похожие скиллы работают по спискам слов и паттернов. Из текста пропадают «delve» и длинное тире, но остаётся скелет, который ему дала модель: тот же зачин, тот же урок в конце. ne-slop-text начинает с другого конца. Он находит, куда модели скатываются по умолчанию именно для этой задачи, и уводит черновик оттуда.</p>
+
+<h2>Что он делает</h2>
+<ul class="feat">
+<li>Пишет из твоего материала, а не только по задаче: из заметок, резюме, описания вакансии и лучше всего — из расшифровки того, как ты отвечаешь вслух на пару вопросов, на любом языке.</li>
+<li>Сначала набрасывает скелет из 3–5 опорных точек. Каждая следующая правка должна их сохранять, чтобы история не развалилась в список фактов.</li>
+<li>Три свежих агента на Opus, Sonnet и Haiku пишут ту же задачу без всякого метода. Это дефолты, то место, куда модель приходит сама.</li>
+<li>Отмечает, что черновик взял сразу у всех трёх дефолтов: одинаковый зачин, одинаковую мораль, одну и ту же цифру из гугла.</li>
+<li>Правит только эти предложения и правит, а не вычёркивает. Проверяющий агент следит, чтобы ни один факт не размылся и опорные точки остались. Агент-читатель следит, чтобы текст оставался понятным.</li>
+<li>Страховка задаёт один вопрос: не осталось ли черновика в машинном облаке своей задачи? Число никогда не цель, почему — ниже.</li>
+<li>Заканчивает поверхностной проверкой на английском и русском. Она строится на списках слов и паттернов humanizer и unslop.</li>
+<li>Отдаёт текст, пару строк о том, что и почему поменялось, и вопросы, на которые твой материал не ответил. Твои файлы остаются целыми.</li>
+</ul>
+
+<h2>Один абзац, три способа</h2>
+<figure class="ex">
+<div class="three">
+<blockquote><b>Sonnet, без метода</b><p lang="en"><mark>One of the most valuable tests I&rsquo;ve written as a QA tech lead caught a bug that no one would have thought to look for.</mark> Our fintech product has an AI onboarding agent in WhatsApp that registers new users, and on its first prototype the LLM didn&rsquo;t know today&rsquo;s date. Because of that, it refused registration to people who had turned 18 only about a month earlier. I knew that language models don&rsquo;t reliably know the current date, so I wrote a test for exactly that age boundary, and it failed on the prototype. <mark>It&rsquo;s a good reminder that when you test AI systems, you have to think about what the model fundamentally can&rsquo;t know</mark>, and that&rsquo;s why we also check the agent&rsquo;s answers with LLM-as-a-judge.</p></blockquote>
+<blockquote><b>То же через humanizer</b><p lang="en"><mark>One of the best tests I&rsquo;ve written as a QA tech lead caught a bug nobody would have thought to look for.</mark> Our fintech product has an AI onboarding agent in WhatsApp that registers new users. On the first prototype the LLM didn&rsquo;t know today&rsquo;s date, so it refused to register people who had turned 18 only about a month earlier. Language models don&rsquo;t reliably know the current date. I knew that, so I wrote a test right on that age boundary, and the prototype failed it. <mark>With AI systems you have to think about what the model can&rsquo;t know</mark>, and that&rsquo;s why we also check the agent&rsquo;s answers with LLM-as-a-judge.</p></blockquote>
+<blockquote class="ours"><b>То же через ne-slop-text</b><p lang="en">I had to test the very first prototype of the AI agent that registers new users in WhatsApp for our fintech product. I know that a neural net doesn&rsquo;t always know what today&rsquo;s date is. If someone has only just turned 18, they should already be able to register, but the neural net didn&rsquo;t know the exact date and blocked registration for people a little over 18, by about a month. So I wrote a test that would fail on exactly that, and on the prototype it failed.</p></blockquote>
+</div>
+<figcaption>Задача: один абзац для поста в LinkedIn про баг, который мы поймали. Материал: мой ответ вслух по-русски. Прогоны первой версии, без ручной правки; тексты оставлены по-английски, как их написали модели. Humanizer оставляет «один из лучших тестов» и вывод в конце (розовым). ne-slop-text ставит на их место мою фразу «нейронка не всегда знает, какое сегодня число» и останавливается там, где тест падает.</figcaption>
+</figure>
+
+<h2>Как я это проверял</h2>
+<p>Я сделал его вместе с Claude на своих текстах, на резюме и письмах работодателям, и проверил вслепую на себе. Тестовая страница перемешивает варианты и выравнивает типографику: однажды человеческий оригинал был единственным текстом с длинным тире, и я поставил его последним.</p>
+<p>Версия 1 исправляла только то, что черновик разделял со всеми тремя дефолтами. В письме команде найма она подняла черновик с третьего места на первое. Два письма Opus в этом тесте имели один и тот же скелет вплоть до последней фразы: «Буду рад встретиться за кофе».</p>
+<p>Версия 2 начиналась с ночного эксперимента. Три агента собрали 139 текстов 37 талантливых авторов, написанных до 2022 года, восстановили задачу, за которой стоял каждый текст, и Opus, Sonnet и Haiku написали каждую задачу тоже: 417 дефолтов. Модель выучила, какие ходы предложений разделяют две стороны. На стороне модели: пояснения к сказанному, морали, анонсы и указатели, концовки-пересказы. На стороне людей: отступления, вопросы, ирония и прямая речь.</p>
+<div class="req narrow">
+<table>
+<thead><tr><th>Авторы, которых модель не видела</th><th class="n">Пары расставлены верно, из 100</th></tr></thead>
+<tbody>
+<tr><th scope="row">Письма</th><td class="n">92</td></tr>
+<tr><th scope="row">Русская деловая проза</th><td class="n">95</td></tr>
+<tr><th scope="row">Технические посты</th><td class="n">78</td></tr>
+</tbody>
+</table>
+<p>Пара — это один человеческий текст и один дефолт для той же задачи. Метрика права, если ставит человеческий текст дальше от стороны модели.</p>
+</div>
+<p>Потом цикл гнал тексты вниз по этой шкале, и тексты становились хуже. Порядок метрики совпадал с моим примерно так же часто, как совпало бы случайно, а три раза её лучший выбор оказывался моим последним. Правщик вырезал все связки и рамки, и история превращалась в список фактов. Работало другое — структура: опорные точки, которые держит каждая правка, правки вместо удалений, нижняя граница ясности, которую держит агент-читатель, и проверка правды. С ними новый цикл был вторым на обеих последних страницах и ни разу не последним. Метрика осталась только страховкой.</p>
+<figure class="shot"><a href="../../img/neslop-blind.jpg?v=f272b244"><img src="../../img/neslop-blind-t.jpg?v=b5be5c0a" alt="Страница слепого теста. Варианты перемешаны; клик отмечает предложение как слоп или как живое." loading="lazy"></a><figcaption>Страница слепого теста. Варианты перемешаны; клик отмечает предложение как слоп или как живое. <span class="meta">1600×1125, 179 KB</span></figcaption></figure>
+
+<h2>Как пользоваться</h2>
+<pre><code>git clone https://github.com/boris-timofeenko/ne-slop-text ~/.claude/skills/ne-slop-text</code></pre>
+<p>Потом попроси Claude Code написать или поправить текст «ne-slop» либо запусти <code>/ne-slop-text</code> с задачей и любыми материалами, какие есть:</p>
+<pre><code>/ne-slop-text напиши письмо команде найма по этой вакансии: &lt;ссылка&gt;. Моё резюме — cv.pdf. Что я говорил о проекте: &lt;расшифровка&gt;
+/ne-slop-text исправь этот абзац: &lt;текст&gt;. Что на самом деле случилось: &lt;заметки&gt;</code></pre>
+<p>Тексты короче примерно 120&nbsp;слов проходят без цикла. Длинные берут от 14 до 18 вызовов агентов и от 10&nbsp;до&nbsp;15&nbsp;минут. Скриптам нужен только Python&nbsp;3.</p>
+
+<p class="status">Судья один, задач несколько, в основном про работу, так что цифры показывают направление. Каждый раунд, включая провалы, записан в <a href="https://github.com/boris-timofeenko/ne-slop-text/blob/main/docs/evidence.md">docs/evidence.md</a>.</p>
+</main>
+<script src="../../v/disc/disc.js?v=6a7d03bd"></script>
+</body>
+</html>
